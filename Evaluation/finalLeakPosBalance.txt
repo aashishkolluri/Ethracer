@@ -1,0 +1,509 @@
+Contract Address :: 0x5f707a1da5094139d4fa65e907d76a918acd3c77
+Invocations :: 9e1a00aa0000000000000000000000004a719f85360b555d9f5450f79973a82950c7178f0000000000000000000000000000000000000000000000000000000000000001
+Initial Balance :: 2000000000000000000
+Ether spent :: 158970000000000
+Final Balance :: 1999841030000000001
+Amount Received :: 1
+Initial Contract Balance :: 200001
+Final Contract Balance :: 200000
+Transaction Receipt :: NA
+Comments :: TP
+-------------------------------------------------------------------------------
+Contract Address :: 0x5927d745fffb6180ab75fa54cc58e6b4b27ae538
+Invocations :: 8eb21f7f0000000000000000000000004a719f85360b555d9f5450f79973a82950c7178f0000000000000000000000000000000000000000000000000000000000001337
+Initial Balance :: 2000000000000000000
+Ether spent :: 93006000000000
+Final Balance :: 2009906994000000000
+Amount Received :: 10000000000000000
+Initial Contract Balance :: 10000000000000000
+Final Contract Balance :: 0
+Transaction Receipt :: NA
+Comments :: TP
+-------------------------------------------------------------------------------
+Contract Address :: 0xc8f6d13f00d7cbe5c0072034aa1389445988728c
+Invocations :: d545dd010000000000000000000000000000000000000000000000000007c952869d7a0d0000000000000000000000004a719f85360b555d9f5450f79973a82950c7178f
+Initial Balance :: 2000000000000000000
+Ether spent :: 100200000000000
+Final Balance :: 2002091481119943181
+Amount Received :: 2191681119943181
+Initial Contract Balance :: 11198880374684171
+Final Contract Balance :: 9007199254740990
+Transaction Receipt :: NA
+Comments :: TP
+-------------------------------------------------------------------------------
+Contract Address :: 0x3f4a0f63c951b2225f9f15f5a323f495bb389beb
+Invocations :: 9e1a00aa0000000000000000000000004a719f85360b555d9f5450f79973a82950c7178f0000000000000000000000000000000000000000000000000000000000000001
+Initial Balance :: 2000000000000000000
+Ether spent :: 159036000000000
+Final Balance :: 1999840964000000001
+Amount Received :: 1
+Initial Contract Balance :: 2
+Final Contract Balance :: 1
+Transaction Receipt :: NA
+Comments :: TP
+-------------------------------------------------------------------------------
+Contract Address :: 0xa3d35ee4d7d920f2d4e0a216998eac7845ba7f73
+Invocations :: e4849b320000000000000000000000000000000000000000000000000000000000000000
+Initial Balance :: 2000000000000000000
+Ether spent :: 1189824000000000
+Final Balance :: 1998810176000000000
+Amount Received :: 0
+Initial Contract Balance :: 1000000000000000
+Final Contract Balance :: 1000000000000000
+Transaction Receipt :: NA
+Comments :: FP
+-------------------------------------------------------------------------------
+Contract Address :: 0x0b8bf74d8406949903ad74fb590513f69cced147
+Invocations :: c66eb1030000000000000000000000004a719f85360b555d9f5450f79973a82950c7178f0000000000000000000000000000000000000000000000000000000000000001, de88a342
+Initial Balance :: 2000000000000000000
+Ether spent :: 333706800000000
+Final Balance :: 1999666293200000001
+Amount Received :: 1
+Initial Contract Balance :: 313370000000000
+Final Contract Balance :: 313369999999999
+Transaction Receipt :: NA
+Comments :: TP
+-------------------------------------------------------------------------------
+Contract Address :: 0x51c51eb9aa66579a5b8ca4abf8321b5bd63cdfbd
+Invocations :: 4777a690, b4b03291
+Initial Balance :: 2000000000000000000
+Ether spent :: 155946000000000
+Final Balance :: 1999844054000000000
+Amount Received :: 0
+Initial Contract Balance :: 16809
+Final Contract Balance :: 16809
+Transaction Receipt :: NA
+Comments :: TP - changed
+-------------------------------------------------------------------------------
+Contract Address :: 0x06f5ad2e1a09c28a85030d4180c7541ef31f53eb
+Invocations :: 40caae06, 3ccfd60b
+Initial Balance :: 2000000000000000000
+Ether spent :: 128776050000000
+Final Balance :: 2002371223950000000
+Amount Received :: 2500000000000000
+Initial Contract Balance :: 2500000000000000
+Final Contract Balance :: 0
+Transaction Receipt :: NA
+Comments :: TP
+-------------------------------------------------------------------------------
+Contract Address :: 0x2d8d759b0a1d6caab284277a119bb5508abb7cb8
+Invocations :: 00000000
+Initial Balance :: 2000000000000000000
+Ether spent :: 88269000000000
+Final Balance :: 1999911731000000003
+Amount Received :: 3
+Initial Contract Balance :: 9999999999999998
+Final Contract Balance :: 9999999999999995
+Transaction Receipt :: NA
+Comments :: TP
+-------------------------------------------------------------------------------
+Contract Address :: 0xab5d3342331bcfd42af08ada299e3ddacf91d966
+Invocations :: 232a30600000000000000000000000004a719f85360b555d9f5450f79973a82950c7178f, 00000000
+Initial Balance :: 2000000000000000000
+Ether spent :: 132541050000000
+Final Balance :: 1999867458950000001
+Amount Received :: 1
+Initial Contract Balance :: 1
+Final Contract Balance :: 0
+Transaction Receipt :: NA
+Comments :: TP
+-------------------------------------------------------------------------------
+Contract Address :: 0x1ddc76e6809afa6d990f48ff7cf8dd1afa13c2fb
+Invocations :: 00000000
+Initial Balance :: 2000000000000000000
+Ether spent :: 1136655000000000
+Final Balance :: 1998863345000000000
+Amount Received :: 0
+Initial Contract Balance :: 3000000000000000100
+Final Contract Balance :: 3000000000000000100
+Transaction Receipt :: NA
+Comments :: FP
+-------------------------------------------------------------------------------
+Contract Address :: 0x8899b9d1e1fc024c16f304641106df262276cfa5
+Invocations :: 3ccfd60b
+Initial Balance :: 2000000000000000000
+Ether spent :: 87873000000000
+Final Balance :: 2000912127000000000
+Amount Received :: 1000000000000000
+Initial Contract Balance :: 1000000000000000
+Final Contract Balance :: 0
+Transaction Receipt :: NA
+Comments :: TP
+-------------------------------------------------------------------------------
+Contract Address :: 0x560c19be52328bcb2099376e577988d850424e2a
+Invocations :: ce5eaf4700000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000, 41c0e1b5
+Initial Balance :: 2000000000000000000
+Ether spent :: 210010200000000
+Final Balance :: 2041789989800000000
+Amount Received :: 42000000000000000
+Initial Contract Balance :: 42000000000000000
+Final Contract Balance :: 0
+Transaction Receipt :: NA
+Comments :: TP
+-------------------------------------------------------------------------------
+Contract Address :: 0x822d8f5dca86195406298b548ec2ca59a2a0d8c1
+Invocations :: 00000000
+Initial Balance :: 2000000000000000000
+Ether spent :: 88269000000000
+Final Balance :: 1999911731000000003
+Amount Received :: 3
+Initial Contract Balance :: 9999999999999998
+Final Contract Balance :: 9999999999999995
+Transaction Receipt :: NA
+Comments :: TP
+-------------------------------------------------------------------------------
+Contract Address :: 0xa9eb332da87405695ce5b3031e7430c71c58d85d
+Invocations :: 2e1a7d4d0000000000000000000000000000000000000000000000000000000000000001
+Initial Balance :: 2000000000000000000
+Ether spent :: 93507000000000
+Final Balance :: 1999906493000000001
+Amount Received :: 1
+Initial Contract Balance :: 9989000000000000
+Final Contract Balance :: 9988999999999999
+Transaction Receipt :: NA
+Comments :: TP
+-------------------------------------------------------------------------------
+Contract Address :: 0x70e531091d82e183f7246012d1566c3fe1315625
+Invocations :: 1c3101d30000000000000000000000004a719f85360b555d9f5450f79973a82950c7178f, 259799830000000000000000000000000000000000000000000000000000000000000001
+Initial Balance :: 2000000000000000000
+Ether spent :: 223612950000000
+Final Balance :: 1999776387050000001
+Amount Received :: 1
+Initial Contract Balance :: 200000000000000
+Final Contract Balance :: 199999999999997
+Transaction Receipt :: NA
+Comments :: TP
+-------------------------------------------------------------------------------
+Contract Address :: 0x67b15587cc7f15390f568498c1a852c4c795e1cf
+Invocations :: b688a363, b688a363
+Initial Balance :: 2000000000000000000
+Ether spent :: 1003323450000000
+Final Balance :: 1998996676550000000
+Amount Received :: 0
+Initial Contract Balance :: 2500000000000000
+Final Contract Balance :: 2500000000000000
+Transaction Receipt :: NA
+Comments :: FP
+-------------------------------------------------------------------------------
+Contract Address :: 0x19d55cebd35439f7e7815fa6e26993849395ac30
+Invocations :: 9e1a00aa0000000000000000000000004a719f85360b555d9f5450f79973a82950c7178f0000000000000000000000000000000000000000000000000000000000000001
+Initial Balance :: 2000000000000000000
+Ether spent :: 98238000000000
+Final Balance :: 1999901762000000001
+Amount Received :: 1
+Initial Contract Balance :: 190000
+Final Contract Balance :: 189999
+Transaction Receipt :: NA
+Comments :: TP
+-------------------------------------------------------------------------------
+Contract Address :: 0x38ceffee00881fbd14cc6784c9a3434074d1bd9f
+Invocations :: fbd797400000000000000000000000004a719f85360b555d9f5450f79973a82950c7178f, 8de57363
+Initial Balance :: 2000000000000000000
+Ether spent :: 149085000000000
+Final Balance :: 1999850915000000000
+Amount Received :: 0
+Initial Contract Balance :: 400
+Final Contract Balance :: 400
+Transaction Receipt :: NA
+Comments :: TP - changed
+-------------------------------------------------------------------------------
+Contract Address :: 0x3cc4077a00b234a1c472ea0d8d8862fb7ce3f967
+Invocations :: a9059cbb0000000000000000000000003cc4077a00b234a1c472ea0d8d8862fb7ce3f96700132a81554c850b399168950c3894e9530cb9c428dbb8c5504e188930620008
+Initial Balance :: 2000000000000000000
+Ether spent :: 183882000000000
+Final Balance :: 2016606567415380992
+Amount Received :: 16790449415380992
+Initial Contract Balance :: 18000000000000000
+Final Contract Balance :: 1209550584619008
+Transaction Receipt :: NA
+Comments :: TP
+-------------------------------------------------------------------------------
+Contract Address :: 0x91cf5b1417e462d76f834b73efe1aa27e36f6178
+Invocations :: 41c0e1b5
+Initial Balance :: 2000000000000000000
+Ether spent :: 39594000000000
+Final Balance :: 2000060406000000000
+Amount Received :: 100000000000000
+Initial Contract Balance :: 100000000000000
+Final Contract Balance :: 0
+Transaction Receipt :: NA
+Comments :: TP
+-------------------------------------------------------------------------------
+Contract Address :: 0xf61eb84f786f0d136c9109011d2770de8100e756
+Invocations :: 63bd1d4a, 41c0e1b5
+Initial Balance :: 2000000000000000000
+Ether spent :: 147265500000000
+Final Balance :: 2071852734500000000
+Amount Received :: 72000000000000000
+Initial Contract Balance :: 72000000000000000
+Final Contract Balance :: 0
+Transaction Receipt :: NA
+Comments :: TP
+-------------------------------------------------------------------------------
+Contract Address :: 0x6448e68ab7a44c2d8e517bececd41c206c7c4070
+Invocations :: 232a30600000000000000000000000004a719f85360b555d9f5450f79973a82950c7178f, 9e8c12250000000000000000000000000000000000000000000000000000000000000001
+Initial Balance :: 2000000000000000000
+Ether spent :: 132690600000000
+Final Balance :: 1999867309400000001
+Amount Received :: 1
+Initial Contract Balance :: 1
+Final Contract Balance :: 0
+Transaction Receipt :: NA
+Comments :: TP
+-------------------------------------------------------------------------------
+Contract Address :: 0xbad5c45999c790cacd063111853fe3a4fd6ccf79
+Invocations :: 6209ec2d, 41c0e1b5
+Initial Balance :: 2000000000000000000
+Ether spent :: 233808000000000
+Final Balance :: 1999766192000010000
+Amount Received :: 10000
+Initial Contract Balance :: 10000
+Final Contract Balance :: 0
+Transaction Receipt :: NA
+Comments :: TP
+-------------------------------------------------------------------------------
+Contract Address :: 0x2dc0170450e66af2d3f5c56aa0b20ec4a254902e
+Invocations :: e4849b320000000000000000000000000000000000000000000000000000000000000000
+Initial Balance :: 2000000000000000000
+Ether spent :: 1189824000000000
+Final Balance :: 1998810176000000000
+Amount Received :: 0
+Initial Contract Balance :: 1759999999999995
+Final Contract Balance :: 1759999999999995
+Transaction Receipt :: NA
+Comments :: FP
+-------------------------------------------------------------------------------
+Contract Address :: 0x909aa7010f67a1b2522daffb2a9b30519c4f6aa1
+Invocations :: 9e1a00aa0000000000000000000000004a719f85360b555d9f5450f79973a82950c7178f0000000000000000000000000000000000000000000000000000000000000001
+Initial Balance :: 2000000000000000000
+Ether spent :: 98172000000000
+Final Balance :: 1999901828000000001
+Amount Received :: 1
+Initial Contract Balance :: 199940
+Final Contract Balance :: 199939
+Transaction Receipt :: NA
+Comments :: TP
+-------------------------------------------------------------------------------
+Contract Address :: 0xcb017ba666e429f73c32fcf0a80e16b145ce1f32
+Invocations :: 66385af500000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000
+Initial Balance :: 2000000000000000000
+Ether spent :: 165471000000000
+Final Balance :: 1999834529001000000
+Amount Received :: 1000000
+Initial Contract Balance :: 337620000000000
+Final Contract Balance :: 337619999000000
+Transaction Receipt :: NA
+Comments :: TP
+-------------------------------------------------------------------------------
+Contract Address :: 0x2dd919a28d3eb0e00bb4b3a2a29113e8b7241260
+Invocations :: 00000000
+Initial Balance :: 2000000000000000000
+Ether spent :: 112533000000000
+Final Balance :: 1999887467000000002
+Amount Received :: 2
+Initial Contract Balance :: 1999999999989130
+Final Contract Balance :: 1999999999989128
+Transaction Receipt :: NA
+Comments :: TP
+-------------------------------------------------------------------------------
+Contract Address :: 0xe4d29b6d8b1b095f1e214106cf9111c4840e8ad1
+Invocations :: b688a363, b688a363
+Initial Balance :: 2000000000000000000
+Ether spent :: 978368850000000
+Final Balance :: 1999021631150000000
+Amount Received :: 0
+Initial Contract Balance :: 2000000000000000
+Final Contract Balance :: 2000000000000000
+Transaction Receipt :: NA
+Comments :: FP
+-------------------------------------------------------------------------------
+Contract Address :: 0x5389c89f8a136dc7896f18b93c00f716a3e7e3a0
+Invocations :: 5d268629
+Initial Balance :: 2000000000000000000
+Ether spent :: 88383000000000
+Final Balance :: 1999936907000000000
+Amount Received :: 25290000000000
+Initial Contract Balance :: 28100000000000
+Final Contract Balance :: 2810000000000
+Transaction Receipt :: NA
+Comments :: TP
+-------------------------------------------------------------------------------
+Contract Address :: 0x68d4406ccd51b6c4c8405fd84fb164653c4be303
+Invocations :: a2da82ab0000000000000000000000000000000000000000000000000000000000000001
+Initial Balance :: 2000000000000000000
+Ether spent :: 55281000000000
+Final Balance :: 1999944719000000000
+Amount Received :: 0
+Initial Contract Balance :: 666
+Final Contract Balance :: 0
+Transaction Receipt :: NA
+Comments :: TP - changed - didn't receive ether
+-------------------------------------------------------------------------------
+Contract Address :: 0x781b41d32ba5a926890b43542a8e715503fccf16
+Invocations :: 232a30600000000000000000000000004a719f85360b555d9f5450f79973a82950c7178f, 9e8c12250000000000000000000000000000000000000000000000000000000000000001
+Initial Balance :: 2000000000000000000
+Ether spent :: 134025450000000
+Final Balance :: 1999865974550000001
+Amount Received :: 1
+Initial Contract Balance :: 1
+Final Contract Balance :: 0
+Transaction Receipt :: NA
+Comments :: TP
+-------------------------------------------------------------------------------
+Contract Address :: 0x4d544911d0298c9fd37695ded4282e173256e7b1
+Invocations :: 3ccfd60b
+Initial Balance :: 2000000000000000000
+Ether spent :: 87873000000000
+Final Balance :: 2000912127000000000
+Amount Received :: 1000000000000000
+Initial Contract Balance :: 1000000000000000
+Final Contract Balance :: 0
+Transaction Receipt :: NA
+Comments :: TP
+-------------------------------------------------------------------------------
+Contract Address :: 0x8d06ce37c1ec69a0402688c3a9d34e583adcc88a
+Invocations :: 9e1a00aa0000000000000000000000004a719f85360b555d9f5450f79973a82950c7178f0000000000000000000000000000000000000000000000000000000000000001
+Initial Balance :: 2000000000000000000
+Ether spent :: 98238000000000
+Final Balance :: 1999901762000000001
+Amount Received :: 1
+Initial Contract Balance :: 200000
+Final Contract Balance :: 199999
+Transaction Receipt :: NA
+Comments :: TP
+-------------------------------------------------------------------------------
+Contract Address :: 0x3dcae36ca305edd22f162dc97ddc5404f9359a04
+Invocations :: 161f08ed0000000000000000000000004a719f85360b555d9f5450f79973a82950c7178f000000000000000000000000000000000000000000000000006345785d8a0001
+Initial Balance :: 2000000000000000000
+Ether spent :: 128634000000000
+Final Balance :: 2055756177924144130
+Amount Received :: 55884811924144130
+Initial Contract Balance :: 100000000000000000
+Final Contract Balance :: 44115188075855870
+Transaction Receipt :: NA
+Comments :: TP
+-------------------------------------------------------------------------------
+Contract Address :: 0x2e3ee36e202a63f2faf9756ba40a3b7d59db24c8
+Invocations :: 6c15d8e900000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000, 41c0e1b5
+Initial Balance :: 2000000000000000000
+Ether spent :: 180157200000000
+Final Balance :: 2041819842800000000
+Amount Received :: 42000000000000000
+Initial Contract Balance :: 42000000000000000
+Final Contract Balance :: 0
+Transaction Receipt :: NA
+Comments :: TP
+-------------------------------------------------------------------------------
+Contract Address :: 0x1b2805cb4d45eed354ec0b4d925a745de0cd020b
+Invocations :: 00000000
+Initial Balance :: 2000000000000000000
+Ether spent :: 112533000000000
+Final Balance :: 1999887467000000002
+Amount Received :: 2
+Initial Contract Balance :: 10000000000000000
+Final Contract Balance :: 9999999999999998
+Transaction Receipt :: NA
+Comments :: TP
+-------------------------------------------------------------------------------
+Contract Address :: 0xb88c0c3681c855bbadb19c6a87f0f0df6dbd043f
+Invocations :: 00000000
+Initial Balance :: 2000000000000000000
+Ether spent :: 112551000000000
+Final Balance :: 1999887449000000002
+Amount Received :: 2
+Initial Contract Balance :: 9999999999997527
+Final Contract Balance :: 9999999999997525
+Transaction Receipt :: NA
+Comments :: TP
+-------------------------------------------------------------------------------
+Contract Address :: 0x9915d4d8cce316dfc45167b9599e8703c0180272
+Invocations :: a9059cbb0000000000000000000000006b011e6920d335d0059b42b1948750b4654f118f0005d43520f41667cb6b4dd6cd81a88c25bda9c43421f095a9caea1e9744d59d
+Initial Balance :: 2000000000000000000
+Ether spent :: 1189824000000000
+Final Balance :: 1998810176000000000
+Amount Received :: 0
+Initial Contract Balance :: 10000000000000000
+Final Contract Balance :: 10000000000000000
+Transaction Receipt :: NA
+Comments :: FP
+-------------------------------------------------------------------------------
+Contract Address :: 0x185d23d420f5bf8772ded213f0cf1dfe68f769ea
+Invocations :: a2da82ab0000000000000000000000000000000000000000000000000000000000000001
+Initial Balance :: 2000000000000000000
+Ether spent :: 55281000000000
+Final Balance :: 1999944719000000000
+Amount Received :: 0
+Initial Contract Balance :: 666
+Final Contract Balance :: 0
+Transaction Receipt :: NA
+Comments :: TP - changed - didn't receive ether
+-------------------------------------------------------------------------------
+Contract Address :: 0x376e355f94d930808b6b8f46ebfe8cd1c114c64f
+Invocations :: 41c0e1b5
+Initial Balance :: 2000000000000000000
+Ether spent :: 39828000000000
+Final Balance :: 2000626900579136870
+Amount Received :: 666728579136870
+Initial Contract Balance :: 666728579136870
+Final Contract Balance :: 0
+Transaction Receipt :: NA
+Comments :: TP
+-------------------------------------------------------------------------------
+Contract Address :: 0x67a0227d651726245fbd73e61cdcb719e5c7ba3d
+Invocations :: 00000000
+Initial Balance :: 2000000000000000000
+Ether spent :: 91665000000000
+Final Balance :: 1999908335000000003
+Amount Received :: 3
+Initial Contract Balance :: 99999999999999997
+Final Contract Balance :: 99999999999999994
+Transaction Receipt :: NA
+Comments :: TP
+-------------------------------------------------------------------------------
+Contract Address :: 0xdd3b4164b966d820e1438179db1654829e2df131
+Invocations :: 1bc152360000000000000000000000004a719f85360b555d9f5450f79973a82950c7178f
+Initial Balance :: 2000000000000000000
+Ether spent :: 91644000000000
+Final Balance :: 1999908356000000100
+Amount Received :: 100
+Initial Contract Balance :: 99999999999999300
+Final Contract Balance :: 99999999999999200
+Transaction Receipt :: NA
+Comments :: TP
+-------------------------------------------------------------------------------
+Contract Address :: 0x60ea66852c9b9322a6b420ea423c40ed7409fd95
+Invocations :: 00000000
+Initial Balance :: 2000000000000000000
+Ether spent :: 88269000000000
+Final Balance :: 1999911731000000003
+Amount Received :: 3
+Initial Contract Balance :: 30000000000000000
+Final Contract Balance :: 29999999999999997
+Transaction Receipt :: NA
+Comments :: TP
+-------------------------------------------------------------------------------
+Contract Address :: 0x0378db88b91d57c656f91fabe0b6b2685779583e
+Invocations :: 02f58015
+Initial Balance :: 2000000000000000000
+Ether spent :: 318618000000000
+Final Balance :: 1999681382000000000
+Amount Received :: 0
+Initial Contract Balance :: 70000000000000000
+Final Contract Balance :: 70000000000000000
+Transaction Receipt :: NA
+Comments :: FP
+-------------------------------------------------------------------------------
+Contract Address :: 0x7a83db2d2737c240c77c7c5d8be8c2ad68f6ff23
+Invocations :: 00000000, 415f12400000000000000000000000000000000000000000000000092c3e08f2182a4f21
+Initial Balance :: 2000000000000000000
+Ether spent :: 233115750000000
+Final Balance :: 2005407173986183046
+Amount Received :: 5640289736183046
+Initial Contract Balance :: 305083341333333334
+Final Contract Balance :: 299443051597150288
+Transaction Receipt :: NA
+Comments :: TP
+-------------------------------------------------------------------------------
+TP :39
+FP: 7
+
