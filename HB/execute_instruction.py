@@ -73,20 +73,20 @@ class EVMCoreHelper:
 
 class EVMCore(EVMCoreHelper):
 
-	def __init__ (self, code, stack, pos, storage, mmemory, data, trace, calldepth, function_hash, actual_key, search_enhance, debug, read_from_blockchain):
-		self.code = code
-		self.stack = stack
-		self.pos = pos
-		self.storage = storage
-		self.mmemory = mmemory
-		self.data = data
-		self.trace = trace
-		self.calldepth = calldepth
-		self.function_hash = function_hash
-		self.actual_key = actual_key
-		self.search_enhance = search_enhance
-		self.debug = debug
-		self.read_from_blockchain = read_from_blockchain
+	# def __init__ (self, code, stack, pos, storage, mmemory, data, trace, calldepth, function_hash, actual_key, search_enhance, debug, read_from_blockchain):
+	# 	self.code = code
+	# 	self.stack = stack
+	# 	self.pos = pos
+	# 	self.storage = storage
+	# 	self.mmemory = mmemory
+	# 	self.data = data
+	# 	self.trace = trace
+	# 	self.calldepth = calldepth
+	# 	self.function_hash = function_hash
+	# 	self.actual_key = actual_key
+	# 	self.search_enhance = search_enhance
+	# 	self.debug = debug
+	# 	self.read_from_blockchain = read_from_blockchain
 
 
 	# Private function for processing instructions involving operation on a single input argument.	

@@ -162,13 +162,17 @@ def check_one_function_on_execute(contract_bytecode, contract_address, function1
 	MyGlobals.stop_search = False
 
 	if function2 == 'noHB':
-		run_one_check( 1, MyGlobals.max_jumpdepth_in_normal_search, False, ops, contract_address, function1, function2,  1, True,debug, read_from_blockchain )
+		evmInstance = EVM(1, MyGlobals.max_jumpdepth_in_normal_search, False, contract_address, function1, function2, True, debug, read_from_blockchain)
+		evmInstance.run_one_check(ops, 1)
+		# run_one_check( 1, MyGlobals.max_jumpdepth_in_normal_search, False, ops, contract_address, function1, function2,  1, True,debug, read_from_blockchain )
 
 	elif function1 == 'noHB':
 		print('Function 2 should be noHB in any case \n')	
 		return {}
 	else:	
-		run_one_check( 1, MyGlobals.max_jumpdepth_in_normal_search, False, ops, contract_address, function1, function2,  1, False,debug, read_from_blockchain )
+		evmInstance = EVM(1, MyGlobals.max_jumpdepth_in_normal_search, False, contract_address, function1, function2, False, debug, read_from_blockchain)
+		evmInstance.run_one_check(ops, 1)
+		# run_one_check( 1, MyGlobals.max_jumpdepth_in_normal_search, False, ops, contract_address, function1, function2,  1, False,debug, read_from_blockchain )
 	
 	soldict = {}
 

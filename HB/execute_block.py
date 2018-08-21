@@ -126,20 +126,20 @@ class EVM(EVMCore):
 
 			if search_enhance:
 				MyGlobals.s.push()
-				execute_one_block(ops,stack,0, trace, storage, mmemory, data, configurations, sha3_dict, sha3_values, ['SSTORE', 'CALL', 'DELEGATECALL', 'CALLCODE', 'SUICIDE'], function_sstore, 0, 0, function_hash, False, key )
+				self.execute_one_block(ops,stack,0, trace, storage, mmemory, data, configurations, sha3_dict, sha3_values, ['SSTORE', 'CALL', 'DELEGATECALL', 'CALLCODE', 'SUICIDE'], function_sstore, 0, 0, function_hash, False, key )
 				MyGlobals.s.pop()
 				
 				return MyGlobals.solution_found
 			
 			if noHB:
 				MyGlobals.s.push()
-				execute_one_block(ops,stack,0, trace, storage, mmemory, data, configurations, sha3_dict, sha3_values, ['STOP', 'RETURN', 'SUICIDE'], function_accept, 0, 0, function_hash, True, key )
+				self.execute_one_block(ops,stack,0, trace, storage, mmemory, data, configurations, sha3_dict, sha3_values, ['STOP', 'RETURN', 'SUICIDE'], function_accept, 0, 0, function_hash, True, key )
 				MyGlobals.s.pop()	
 				return		
 		
 			MyGlobals.s = MyGlobals.s1	
 			MyGlobals.s.push()
-			execute_one_block(ops,stack,0, trace, storage, mmemory, data, configurations, sha3_dict, sha3_values, ['STOP', 'RETURN'], function_accept, 0, 0, function_hash, False, key )
+			self.execute_one_block(ops,stack,0, trace, storage, mmemory, data, configurations, sha3_dict, sha3_values, ['STOP', 'RETURN'], function_accept, 0, 0, function_hash, False, key )
 			MyGlobals.s.pop()
 			print('\033[94m[+] Finished executing 1st tree... \033[0m')
 			print('\033[92m    Visited %d nodes\033[0m'%(MyGlobals.visited_nodes))
@@ -170,7 +170,7 @@ class EVM(EVMCore):
 			MyGlobals.s.add(If(BitVec(('TIMESTAMP'+'-'+str(1)+'-'+function2),256) == BitVecVal(315, 256) * BitVec(('NUMBER'+'-'+str(1)+'-'+function2),256), BitVecVal(1, 256),  BitVecVal(0, 256)) == BitVecVal(1,256) )
 			MyGlobals.s.add(If(BitVec(('TIMESTAMP'+'-'+str(1)+'-'+function1),256) == BitVecVal(315, 256) * BitVec(('NUMBER'+'-'+str(1)+'-'+function1),256), BitVecVal(1, 256),  BitVecVal(0, 256)) == BitVecVal(1,256) )
 
-			execute_one_block(ops,stack,0, trace, storage2, mmemory, data2, configurations, sha3_dict2, sha3_values2,  ['STOP', 'RETURN'], function_accept, 0, 0, function_hash, True, key )
+			self.execute_one_block(ops,stack,0, trace, storage2, mmemory, data2, configurations, sha3_dict2, sha3_values2,  ['STOP', 'RETURN'], function_accept, 0, 0, function_hash, True, key )
 			MyGlobals.s.pop()
 
 			MyGlobals.s = MyGlobals.s1
@@ -193,7 +193,7 @@ class EVM(EVMCore):
 			MyGlobals.stop_search = False
 
 			MyGlobals.s.push()
-			execute_one_block(ops,stack,0, trace, storage3, mmemory, data3, configurations, sha3_dict3, sha3_values3,  ['JUMP', 'JUMPI', 'REVERT'], function_throw, 0, 0, function_hash, True, key )
+			self.execute_one_block(ops,stack,0, trace, storage3, mmemory, data3, configurations, sha3_dict3, sha3_values3,  ['JUMP', 'JUMPI', 'REVERT'], function_throw, 0, 0, function_hash, True, key )
 			MyGlobals.s.pop()
 
 			print('\033[94m[+] Finished executing 3rd tree... \033[0m')
@@ -213,7 +213,7 @@ class EVM(EVMCore):
 				MyGlobals.stop_search = False
 
 				MyGlobals.s.push()
-				execute_one_block(ops,stack,0, trace, storage3, mmemory, data3, configurations, sha3_dict3, sha3_values3,  ['STOP', 'RETURN'], function_accept, 0, 0, function_hash, False,  key )
+				self.execute_one_block(ops,stack,0, trace, storage3, mmemory, data3, configurations, sha3_dict3, sha3_values3,  ['STOP', 'RETURN'], function_accept, 0, 0, function_hash, False,  key )
 				MyGlobals.s.pop()
 			
 			if MyGlobals.in_sha3>0 and MyGlobals.solution_found:
@@ -242,7 +242,7 @@ class EVM(EVMCore):
 			MyGlobals.s = MyGlobals.s1
 			MyGlobals.s.push()
 			MyGlobals.s.push()
-			execute_one_block(ops,stack,0, trace, storage4, mmemory, data4, configurations, sha3_dict4, sha3_values4,  ['JUMP', 'JUMPI', 'REVERT'], function_throw, 0, 0, function_hash, True, key )
+			self.execute_one_block(ops,stack,0, trace, storage4, mmemory, data4, configurations, sha3_dict4, sha3_values4,  ['JUMP', 'JUMPI', 'REVERT'], function_throw, 0, 0, function_hash, True, key )
 			MyGlobals.s.pop()
 			print('\033[94m[+] Finished executing 4th tree... \033[0m')
 
@@ -255,7 +255,7 @@ class EVM(EVMCore):
 
 		return		
 		
-	def execute_one_block(self, ops , stack , pos , trace, storage, mmemory, data, configurations,  sha3_dict,  sha3_values, search_op, search_function, jumpdepth, calldepth, function_hash, find_solution,  key):
+	def self.execute_one_block(self, ops , stack , pos , trace, storage, mmemory, data, configurations,  sha3_dict,  sha3_values, search_op, search_function, jumpdepth, calldepth, function_hash, find_solution,  key):
 
 		sys.stdout.flush()
 
@@ -352,7 +352,7 @@ class EVM(EVMCore):
 				
 				# In case there is a probability of finding a solution we need to add the additional constraints to the solver before finding the solutions. 
 				if MyGlobals.search_condition_found and not search_enhance:
-					add_additional_conditions(MyGlobals.s, sha3_values)
+					self.add_additional_conditions(MyGlobals.s, sha3_values)
 					# If jump_condition is True then add the addtional condition of JUMPI to the global solver to retrieve solutions.
 					if jump_condition:
 						temp = copy.deepcopy(stack[-2])
@@ -363,7 +363,7 @@ class EVM(EVMCore):
 				if MyGlobals.search_condition_found and (not search_enhance) and (not noHB) and ((key ==1 or key ==2) or (key ==3 and not find_solution)) and (not jump_condition):
 
 					# Save the state of execution before calling next tree
-					datastructures = new_state(stack, storage, sha3_dict, sha3_values, mmemory, trace, data)
+					datastructures = self.new_state(stack, storage, sha3_dict, sha3_values, mmemory, trace, data)
 					MyGlobals.s.push()
 					self.run_one_check(ops, key+1, datastructures)
 	 				MyGlobals.s.pop()
@@ -451,11 +451,11 @@ class EVM(EVMCore):
 							MyGlobals.solution_found = True
 							return
 
-						add_additional_conditions(MyGlobals.s, sha3_values)
+						self.add_additional_conditions(MyGlobals.s, sha3_values)
 
 						if (not search_enhance) and (not noHB) and ((key ==1 or key ==2) or (key ==3 and 'STOP' in search_op)):
 							# Save the state of execution before calling next tree
-							datastructures = new_state(stack, storage, sha3_dict, sha3_values, mmemory, trace, data)
+							datastructures = self.new_state(stack, storage, sha3_dict, sha3_values, mmemory, trace, data)
 							MyGlobals.s.push()
 							self.run_one_check( ops, key+1, datastructures )	
 							MyGlobals.s.pop()
@@ -550,7 +550,7 @@ class EVM(EVMCore):
 							if debug: print('\t'*8+'-'*20+'JUMPI branch 1 (go through)')
 							sole = ''
 
-							execute_one_block(ops,stack2,	pos + 1, 	trace2, storage2, 	mmemory2, data2, configurations,  sha3_dict2, sha3_values2, search_op, search_function, jumpdepth+1, calldepth,  function_hash, find_solution,  key )
+							self.execute_one_block(ops,stack2,	pos + 1, 	trace2, storage2, 	mmemory2, data2, configurations,  sha3_dict2, sha3_values2, search_op, search_function, jumpdepth+1, calldepth,  function_hash, find_solution,  key )
 							MyGlobals.search_condition_found = False
 
 						else:	
@@ -595,7 +595,7 @@ class EVM(EVMCore):
 								if debug: print('\t'*8+'-'*20+'JUMPI branch 1 (go through)')
 
 								sole = ''
-								execute_one_block(ops,stack2,	pos + 1, 	trace2, storage2, 	mmemory2, data2, configurations,  sha3_dict2, sha3_values2, search_op, search_function, jumpdepth+1, calldepth,  function_hash, find_solution,  key )
+								self.execute_one_block(ops,stack2,	pos + 1, 	trace2, storage2, 	mmemory2, data2, configurations,  sha3_dict2, sha3_values2, search_op, search_function, jumpdepth+1, calldepth,  function_hash, find_solution,  key )
 								MyGlobals.search_condition_found = False
 
 								if MyGlobals.jumpi_switch : MyGlobals.jumpi_switch = False
@@ -670,7 +670,7 @@ class EVM(EVMCore):
 							if debug: print( ('\t'*8+'-'*20+'JUMPI branch 2 (jump) on step %x' + sole ) % ops[pos]['id'] )
 
 
-							execute_one_block(ops,stack2,	new_position, 	trace2, storage2, 	mmemory2, data2, configurations,  sha3_dict2, sha3_values2, search_op, search_function,  jumpdepth, calldepth, function_hash, find_solution, key )
+							self.execute_one_block(ops,stack2,	new_position, 	trace2, storage2, 	mmemory2, data2, configurations,  sha3_dict2, sha3_values2, search_op, search_function,  jumpdepth, calldepth, function_hash, find_solution, key )
 							MyGlobals.search_condition_found = False
 
 
@@ -721,7 +721,7 @@ class EVM(EVMCore):
 								if debug: print( ('\t'*8+'-'*20+'JUMPI branch 2 (jump) on step %x' + sole ) % ops[pos]['id'] )
 
 
-								execute_one_block(ops,stack2,	new_position, 	trace2, storage2, 	mmemory2, data2, configurations,  sha3_dict2, sha3_values2, search_op, search_function,  jumpdepth, calldepth, function_hash, find_solution, key )
+								self.execute_one_block(ops,stack2,	new_position, 	trace2, storage2, 	mmemory2, data2, configurations,  sha3_dict2, sha3_values2, search_op, search_function,  jumpdepth, calldepth, function_hash, find_solution, key )
 								MyGlobals.search_condition_found = False
 
 								if MyGlobals.jumpi_switch : MyGlobals.jumpi_switch = False
@@ -808,7 +808,7 @@ class EVM(EVMCore):
 							MyGlobals.s.push()
 							MyGlobals.s.add( BitVec('input'+str(actual_key)+('[%x'%addr.as_long())+']' +'-'+function_hash,256) == one_branch_size)
 
-							execute_one_block(ops,stack2,	pos+1, 	trace2, storage2, 	mmemory2, data2, configurations, sha3_dict2, sha3_values2,	search_op, search_function,  jumpdepth, calldepth, function_hash, find_solution, key )
+							self.execute_one_block(ops,stack2,	pos+1, 	trace2, storage2, 	mmemory2, data2, configurations, sha3_dict2, sha3_values2,	search_op, search_function,  jumpdepth, calldepth, function_hash, find_solution, key )
 							MyGlobals.search_condition_found = False
 							MyGlobals.s.pop()
 
@@ -846,7 +846,7 @@ class EVM(EVMCore):
 						MyGlobals.s.push()
 						MyGlobals.s.append(If( data2['inputlength-'+ str(actual_key)+ '-' +function_hash] > BitVecVal(0, 256),  BitVecVal(1, 256),  BitVecVal(0, 256)) == BitVecVal(1,256) )
 						
-						execute_one_block(ops,stack2,	pos+1, 	trace2, storage2, 	mmemory2, data2, configurations,  sha3_dict2, sha3_values2, search_op, search_function,  jumpdepth, calldepth, function_hash, find_solution,  key )
+						self.execute_one_block(ops,stack2,	pos+1, 	trace2, storage2, 	mmemory2, data2, configurations,  sha3_dict2, sha3_values2, search_op, search_function,  jumpdepth, calldepth, function_hash, find_solution,  key )
 						MyGlobals.s.pop()
 
 						if search_enhance and MyGlobals.stop_search:
@@ -876,7 +876,7 @@ class EVM(EVMCore):
 							MyGlobals.s.push()
 							
 							if debug: print('\033[91m In branch %x of Calldatasize\n \033[0m'%(i))					
-							execute_one_block(ops,stack2,	pos+1, 	trace2, storage2, 	mmemory2, data2, configurations,  sha3_dict2, sha3_values2, search_op, search_function,  jumpdepth, calldepth, function_hash, find_solution,  key )
+							self.execute_one_block(ops,stack2,	pos+1, 	trace2, storage2, 	mmemory2, data2, configurations,  sha3_dict2, sha3_values2, search_op, search_function,  jumpdepth, calldepth, function_hash, find_solution,  key )
 							MyGlobals.s.pop()
 							MyGlobals.search_condition_found = False
 						return 
@@ -958,7 +958,7 @@ class EVM(EVMCore):
 								MyGlobals.solution_found = False
 
 								MyGlobals.s.push()
-								execute_one_block(ops,stack2,	pos+1, 	trace2, storage2, 	mmemory2, data2, configurations,  sha3_dict2, sha3_values2, search_op, search_function,  jumpdepth, calldepth, function_hash, find_solution,  key )	
+								self.execute_one_block(ops,stack2,	pos+1, 	trace2, storage2, 	mmemory2, data2, configurations,  sha3_dict2, sha3_values2, search_op, search_function,  jumpdepth, calldepth, function_hash, find_solution,  key )	
 								MyGlobals.s.pop()
 								MyGlobals.search_condition_found = False
 
@@ -1005,7 +1005,7 @@ class EVM(EVMCore):
 									MyGlobals.solution_found = False
 
 									MyGlobals.s.push()
-									execute_one_block(ops,stack2,	pos+1, 	trace2, storage2, 	mmemory2, data2, configurations,  sha3_dict2, sha3_values2, search_op, search_function,  jumpdepth, calldepth, function_hash, find_solution,  key )
+									self.execute_one_block(ops,stack2,	pos+1, 	trace2, storage2, 	mmemory2, data2, configurations,  sha3_dict2, sha3_values2, search_op, search_function,  jumpdepth, calldepth, function_hash, find_solution,  key )
 									MyGlobals.s.pop()
 
 									# Deactivate the sha3 branch
@@ -1062,7 +1062,7 @@ class EVM(EVMCore):
 								MyGlobals.solution_found = False
 
 								MyGlobals.s.push()
-								execute_one_block(ops,stack2,	pos+1, 	trace2, storage2, 	mmemory2, data2, configurations,  sha3_dict2, sha3_values2, search_op, search_function,  jumpdepth, calldepth, function_hash, find_solution,  key )
+								self.execute_one_block(ops,stack2,	pos+1, 	trace2, storage2, 	mmemory2, data2, configurations,  sha3_dict2, sha3_values2, search_op, search_function,  jumpdepth, calldepth, function_hash, find_solution,  key )
 								MyGlobals.s.pop()
 								MyGlobals.search_condition_found = False
 
@@ -1125,7 +1125,7 @@ class EVM(EVMCore):
 									MyGlobals.solution_found = False
 
 									MyGlobals.s.push()
-									execute_one_block(ops,stack2,	pos+1, 	trace2, storage2, 	mmemory2, data2, configurations,  sha3_dict2, sha3_values2, search_op, search_function,  jumpdepth, calldepth, function_hash, find_solution,  key )
+									self.execute_one_block(ops,stack2,	pos+1, 	trace2, storage2, 	mmemory2, data2, configurations,  sha3_dict2, sha3_values2, search_op, search_function,  jumpdepth, calldepth, function_hash, find_solution,  key )
 									MyGlobals.s.pop()
 									MyGlobals.search_condition_found = False
 
@@ -1183,7 +1183,7 @@ class EVM(EVMCore):
 								MyGlobals.solution_found = False
 
 								MyGlobals.s.push()
-								execute_one_block(ops,stack2,	pos+1, 	trace2, storage2, 	mmemory2, data2, configurations,  sha3_dict2, sha3_values2, search_op, search_function,  jumpdepth, calldepth, function_hash, find_solution,  key )
+								self.execute_one_block(ops,stack2,	pos+1, 	trace2, storage2, 	mmemory2, data2, configurations,  sha3_dict2, sha3_values2, search_op, search_function,  jumpdepth, calldepth, function_hash, find_solution,  key )
 								MyGlobals.s.pop()
 								MyGlobals.search_condition_found = False
 
@@ -1231,7 +1231,7 @@ class EVM(EVMCore):
 									MyGlobals.solution_found = False
 
 									MyGlobals.s.push()
-									execute_one_block(ops,stack2,	pos+1, 	trace2, storage2, 	mmemory2, data2, configurations,  sha3_dict2, sha3_values2, search_op, search_function,  jumpdepth, calldepth, function_hash, find_solution,  key )
+									self.execute_one_block(ops,stack2,	pos+1, 	trace2, storage2, 	mmemory2, data2, configurations,  sha3_dict2, sha3_values2, search_op, search_function,  jumpdepth, calldepth, function_hash, find_solution,  key )
 									MyGlobals.s.pop()
 									MyGlobals.search_condition_found = False
 
@@ -1290,7 +1290,7 @@ class EVM(EVMCore):
 								MyGlobals.solution_found = False
 
 								MyGlobals.s.push()
-								execute_one_block(ops,stack2,	pos+1, 	trace2, storage2, 	mmemory2, data2, configurations,  sha3_dict2, sha3_values2, search_op, search_function,  jumpdepth, calldepth, function_hash, find_solution,  key )
+								self.execute_one_block(ops,stack2,	pos+1, 	trace2, storage2, 	mmemory2, data2, configurations,  sha3_dict2, sha3_values2, search_op, search_function,  jumpdepth, calldepth, function_hash, find_solution,  key )
 								MyGlobals.s.pop()
 								MyGlobals.search_condition_found = False
 
@@ -1348,7 +1348,7 @@ class EVM(EVMCore):
 									MyGlobals.solution_found = False
 
 									MyGlobals.s.push()
-									execute_one_block(ops,stack2,	pos+1, 	trace2, storage2, 	mmemory2, data2, configurations,  sha3_dict2, sha3_values2, search_op, search_function,  jumpdepth, calldepth, function_hash, find_solution,  key )
+									self.execute_one_block(ops,stack2,	pos+1, 	trace2, storage2, 	mmemory2, data2, configurations,  sha3_dict2, sha3_values2, search_op, search_function,  jumpdepth, calldepth, function_hash, find_solution,  key )
 									MyGlobals.s.pop()
 									MyGlobals.search_condition_found = False	
 

@@ -47,7 +47,9 @@ def stateChangingFunctions(fullfunclist, contract_bytecode, contract_address, re
 		MyGlobals.solver_configurations.clear()
 		MyGlobals.Time_checkpoint = datetime.datetime.now()
 		MyGlobals.ONE_HB_TIMEOUT = 1*60
-		importantFunc1 = run_one_check( 1, MyGlobals.max_jumpdepth_in_normal_search, True, ops, contract_address, function1, function2,  1, False, debug, read_from_blockchain )
+		evmInstance = EVM(1, MyGlobals.max_jumpdepth_in_normal_search, True, contract_address, function1, function2, False, debug, read_from_blockchain)
+		importantFunc1 = evmInstance.run_one_check(ops, 1)
+		# importantFunc1 = run_one_check( 1, MyGlobals.max_jumpdepth_in_normal_search, True, ops, contract_address, function1, function2,  1, False, debug, read_from_blockchain )
 		t2 = datetime.datetime.now()
 		if MyGlobals.ONE_CONTRACT_HB_TIMEOUT < int((t2 - MyGlobals.Time_checkpoint_HB).total_seconds()):
 			return [], []	
@@ -73,7 +75,9 @@ def stateChangingFunctions(fullfunclist, contract_bytecode, contract_address, re
 		MyGlobals.solver_configurations.clear()
 		MyGlobals.Time_checkpoint = datetime.datetime.now()
 		MyGlobals.ONE_HB_TIMEOUT = 1*60
-		importantFunc2 = run_one_check( 1, MyGlobals.max_jumpdepth_in_normal_search, True, ops, contract_address, function1, function2,  1, False, debug, read_from_blockchain )
+		evmInstance = EVM(1, MyGlobals.max_jumpdepth_in_normal_search, True, contract_address, function1, function2, False, debug, read_from_blockchain)
+		importantFunc2 = evmInstance.run_one_check(ops, 1)
+		# importantFunc2 = run_one_check( 1, MyGlobals.max_jumpdepth_in_normal_search, True, ops, contract_address, function1, function2,  1, False, debug, read_from_blockchain )
 		t2 = datetime.datetime.now()
 		if MyGlobals.ONE_CONTRACT_HB_TIMEOUT < int((t2 - MyGlobals.Time_checkpoint_HB).total_seconds()):
 			return [], []
