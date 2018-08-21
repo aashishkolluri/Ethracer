@@ -1,5 +1,5 @@
 from __future__ import print_function
-from execute_block import run_one_check
+from execute_block import *
 from values import get_params, set_params, initialize_params, print_params, MyGlobals, clear_globals
 from parse_code import *
 import datetime

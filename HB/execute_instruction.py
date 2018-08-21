@@ -92,7 +92,7 @@ class EVMCore(EVMCoreHelper):
 	# Private function for processing instructions involving operation on a single input argument.	
 	def _unary(self, o1, step, op='NONE' ):
 
-		if is_undefined(o1): return {'type':'undefined','step':step}
+		if self.is_undefined(o1): return {'type':'undefined','step':step}
 
 		z1 = simplify(o1['z3'])
 		if      op == 'NOT': z3 = ~z1
