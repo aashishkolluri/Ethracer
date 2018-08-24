@@ -13,6 +13,13 @@ random.seed(datetime.datetime.now())
 import z3
 from z3 import *
 
+''' 
+* This class is responsible for generatig ad propogatig symbolic costraints.
+* Function run_one_check implemets the framework of finding weak and \
+  execute_one_block is resposible for executing each block of instructions 
+  and checking path feasiblity along the way.
+* It returns the solution of a weak HB relation if it exists.  
+'''
 class EVM(EVMCore):
 	
 	def __init__(self, max_call_depth, max_jump_depth, search_enhance, contract_address, function1, function2, noHB, debug, read_from_blockchain):
@@ -25,16 +32,13 @@ class EVM(EVMCore):
 		self.noHB = noHB
 		self.debug = debug
 		self.read_from_blockchain = read_from_blockchain
-
+	
 	def function_accept(self, op, stack, trace, debug):
 		op_name = op['o']
 		op_val = op['input']
-
 		return True, False
 
 	def function_throw(self, op, stack, trace, debug ):
-
-
 		op_name = op['o']
 		op_val = op['input']
 
@@ -53,8 +57,7 @@ class EVM(EVMCore):
 
 		return True, False	
 
-	def function_sstore(self, op, stack, trace, debug):
-		
+	def function_sstore(self, op, stack, trace, debug):		
 		op_name = op['o']
 		op_val = op['input']	
 		return True, True
@@ -81,9 +84,7 @@ class EVM(EVMCore):
 			
 			else:
 				print('Not able to add conditions\n')
-
 		return		
-
 
 	def new_state(self, stack, storage, sha3_dict, sha3_values, mmemory, trace, data):
 		datastructures = {}
@@ -92,11 +93,23 @@ class EVM(EVMCore):
 		datastructures['sha3_dict'] = copy.deepcopy(sha3_dict)
 		datastructures['data'] = copy.deepcopy(data)
 		datastructures['sha3_values'] = copy.deepcopy(sha3_values)
-
 		return datastructures
 
-	def  run_one_check(self, ops, key, datastructures = {}):
 
+
+	'''
+		Finding weak HB between function1, function2 happens in four phases. 
+		1 -----> function1 terminates.
+		2 -----> function2 terminates.
+		3 -----> function2 terminates or function2 throws.
+		4 -----> function1 terminates if function2 throws in stage 3.
+
+		This function takes the key as input which specifies the phase.
+	    Hence, the values of key could be 1, 2, 3, 4. 
+	    It calls into execute_one_block for symbolic analysis of each phase.
+	''' 		
+
+	def  run_one_check(self, ops, key, datastructures = {}):
 
 		global MAX_JUMP_DEPTH, MAX_CALL_DEPTH, fast_search, search_condition_found, solution_found
 
@@ -255,6 +268,17 @@ class EVM(EVMCore):
 
 		return		
 		
+	'''
+		This function is called by run_one_check function and is in mutual recursion with it.
+		It calls back into run_one_check when a particular phase of finding weak HB is completed.
+		It returns under several conditions.
+		1) When a solution is found.
+		2) When the time limit exceeds.
+		3) When jumpdepth limit is reached.
+		4) When node limit is reached.
+	'''	
+
+
 	def execute_one_block(self, ops , stack , pos , trace, storage, mmemory, data, configurations,  sha3_dict,  sha3_values, search_op, search_function, jumpdepth, calldepth, function_hash, find_solution,  key):
 
 		sys.stdout.flush()

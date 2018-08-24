@@ -7,7 +7,7 @@ import multiprocessing
 import datetime
 from z3 import *
 import check_execute
-from check_execute import check_one_contract
+from check_execute import WHBFinder
 from values import MyGlobals, initialize_params
 import misc
 from misc import get_func_hashes, print_function_name, find_blockNumber, getFuncHashes, print_function_name, print_nodes, print_nodes_list, print_notimplemented
@@ -18,9 +18,11 @@ import re
 import ast
 import optimize_nodes
 from optimize_nodes import *
+import global_params
 
 
 
+# Called when contracts are executed in parallel, on differet cores.
 
 def exec_main(core_id, core_no, contract_list, read_from_blockchain):
 
@@ -86,21 +88,46 @@ def exec_main(core_id, core_no, contract_list, read_from_blockchain):
 			f.write(addr+'\n')
 			f.close()
 
-		
-		# print(sol_file, addr)
+		# Start analysing the contract.
 		exec_contract(sol_file, addr)
 
 
 		
 
 
+def initParams():
+	MyGlobals.debug = False
+	MyGlobals.debug1 = False
+	MyGlobals.max_solutions = global_params.MAX_SOLUTIONS
+	MyGlobals.read_from_blockchain = global_params.READ_FROM_BLOCKCHAIN
 
-debug = False
-debug1 = False
-read_from_blockchain = True
-criteria = 1
-nsolutions = 3
+	try:
+		MyGlobals.STORAGE_AT_BLOCK = global_params.STORAGE_AT_BLOCK
+	except AttributeError:
+		pass
+	try:
+		MyGlobals.MAX_JUMP_DEPTH = global_params.MAX_JUMP_DEPTH
+	except AttributeError:
+		pass
+	try:
+		MyGlobals.MAX_VISITED_NODES = global_params.MAX_VISITED_NODES
+	except AttributeError:
+		pass
+	try:
+		MyGlobals.SOLVER_TIMEOUT = global_params.SOLVER_TIMEOUT
+	except AttributeError:
+		pass
+	try:
+		MyGlobals.ONE_CONTRACT_HB_TIMEOUT = global_params.ONE_CONTRACT_HB_TIMEOUT
+	except AttributeError:
+		pass
+	try:
+		MyGlobals.ONE_HB_TIMEOUT = global_params.ONE_HB_TIMEOUT
+	except AttributeError:
+		pass		
 
+
+# Initialize all datastructures which are required for analysis.
 def initialize_datastructures():
 	MyGlobals.functions[:] = []
 	MyGlobals.symbolic_vars[:] = []
@@ -110,8 +137,11 @@ def initialize_datastructures():
 	MyGlobals.sha3vardata.clear()
 	MyGlobals.solution_dict.clear()
 
+# This is the entry point to actual analysis of a cotract. This function initializes all the necessary information to do the analysis.
 def exec_contract(sol_file, c_address):
-	
+	debug = MyGlobals.debug
+	debug1 = MyGlobals.debug1
+
 	initialize_datastructures()
 	dbcon = sqlite3.connect('/mnt/d/mnt_c/contract-main.db')
 
@@ -168,9 +198,8 @@ def exec_contract(sol_file, c_address):
 	if not args.atblock:
 		MyGlobals.STORAGE_AT_BLOCK = find_blockNumber(c_address)
 
-	# Initialize global parameters
-	initialize_params(read_from_blockchain, c_address, nsolutions)
-	MyGlobals.max_solutions = nsolutions
+	# Initialize remaining private global parameters.
+	initialize_params(c_address)
 
 	# Append owners to the caller array
 	MyGlobals.st['caller'].append(owner.lstrip('0x'))
@@ -181,7 +210,8 @@ def exec_contract(sol_file, c_address):
 	time0 = datetime.datetime.now()
 
 	MyGlobals.Time_checkpoint_HB = datetime.datetime.now()
-	node_list, simplified_hb = check_one_contract( code, c_address, debug, funclist2, read_from_blockchain)
+	whbFinderInstance = WHBFinder(code, c_address, debug, funclist2, MyGlobals.read_from_blockchain)
+	node_list, simplified_hb = whbFinderInstance.check_one_contract()
 	# node_list = [{'tx_caller': 'cee827be9b520a485db84d1f09cc0a99ea878686', 'name': '095ea7b3', 'tx_blocknumber': '493e00', 'tx_value': '0', 'tx_timestamp': '5a5c001d', 'tx_input': '095ea7b3000000000000000000000000cee827be9b520a485db84d1f09cc0a99ea8786860000000000000000000000000000000000000000000000000000000001457000'}, {'tx_caller': 'cee827be9b520a485db84d1f09cc0a99ea878686', 'name': '23b872dd', 'tx_blocknumber': '493e00', 'tx_value': '0', 'tx_timestamp': '5a5c001d', 'tx_input': '23b872dd000000000000000000000000cee827be9b520a485db84d1f09cc0a99ea87868600000000000000000000000018a230ec24cab7bf27b001f712ab1480ad979c3a0000000000000000000000000000000000000000000000000000000001457000'}, {'tx_caller': 'cee827be9b520a485db84d1f09cc0a99ea878686', 'name': '23b872dd', 'tx_blocknumber': '493e00', 'tx_value': '0', 'tx_timestamp': '5a5c001d', 'tx_input': '23b872dd000000000000000000000000cee827be9b520a485db84d1f09cc0a99ea878686000000000000000000000000cee827be9b520a485db84d1f09cc0a99ea8786860000000000000000000000000000000000000000000000000000000001457000'}, {'tx_value': '0', 'tx_caller': 'cee827be9b520a485db84d1f09cc0a99ea878686', 'name': 'a9059cbb', 'tx_input': 'a9059cbb00000000000000000000000003eedb3109c1bec4598c5e0353daa2661b2d46e90000000000000000000000000000000000000000000000000000000000000100'}]
 	# simplified_hb = [(0, 1), (0, 2)]	
 	
@@ -195,7 +225,7 @@ def exec_contract(sol_file, c_address):
 	# Find the correct way to give input to the fuzzer.
 	# check_all_traces( [], 5, node_list, simplified_hb, [], balances, c_address, contract_bytecode, disasm, debug1, read_from_blockchain )
 	print('\nNodes_list_old ',node_list, '\n')
-	new_nodes_list, new_simplified_hb = optimize_nodes(node_list, simplified_hb, c_address, disasm, debug, read_from_blockchain, MyGlobals.STORAGE_AT_BLOCK)
+	new_nodes_list, new_simplified_hb = optimize_nodes(node_list, simplified_hb, c_address, disasm, debug, MyGlobals.read_from_blockchain, MyGlobals.STORAGE_AT_BLOCK)
 	print('\nNodes_list_optimized ',new_nodes_list, '\n')
 	print('\nNew simplified HB ', new_simplified_hb, '\n')
 
@@ -211,7 +241,11 @@ def exec_contract(sol_file, c_address):
 	# criteria is used to differetiate the buggy traces 0: balances at the end 1: storage at the end
 	print('\033[92m\n.....................Now fuzzing between the nodes.....................\n\033[0m')
 	time1 = datetime.datetime.now()
-	check_all_traces( [], 4, new_nodes_list, new_simplified_hb, [], balances, c_address, contract_bytecode, disasm, criteria, debug1, read_from_blockchain, MyGlobals.STORAGE_AT_BLOCK, time1, False)
+
+	if not args.balances: 
+		criteria = global_params.CHECK_FOR_BALANCE
+
+	check_all_traces( [], 4, new_nodes_list, new_simplified_hb, [], balances, c_address, contract_bytecode, disasm, criteria, debug1, MyGlobals.read_from_blockchain, MyGlobals.STORAGE_AT_BLOCK, time1, False)
 	time2 = datetime.datetime.now()
 
 	print('Printing not implemented ins for contract %s'%(c_address))
@@ -223,6 +257,8 @@ def exec_contract(sol_file, c_address):
 
 	print('\n Complete running time for contract ', c_address, (time2-time0).total_seconds(), '\n\n')
 
+
+# Execute only one trace (used for debugging purposes)
 def check_trace(nodes, c_address, trace):
 	dbcon = sqlite3.connect('/mnt/d/mnt_c/contract-main.db')
 
@@ -243,7 +279,7 @@ def check_trace(nodes, c_address, trace):
 
 	contract_bytecode = code
 	balances =  []
-	disasm = op_parse.parse_code(contract_bytecode, debug)
+	disasm = op_parse.parse_code(contract_bytecode, MyGlobals.debug)
 	c_address = hex(int(c_address, 16)).rstrip('L')
 	c_address = pad_address(c_address)
 
@@ -262,6 +298,13 @@ def check_trace(nodes, c_address, trace):
 		print('\033[92m[+]Executed trace: %s\033[0m\n'%(strtrace))
 
 
+
+# initializeGlobalParams
+initParams()
+
+
+# Argument parser
+
 parser = argparse.ArgumentParser()
 parser.add_argument("--debug",        help="Print debug info", action='store_true')
 parser.add_argument("--debugfuzzer",        help="Print debug info", action='store_true')
@@ -279,20 +322,20 @@ parser.add_argument("--checkonetrace",			type=str, help="Check a trace by execut
 args = parser.parse_args()
 
 if args.debug:
-	debug = True
+	MyGlobals.debug = True
 if args.debugfuzzer:
-	debug1 = True    
+	MyGlobals.debug1 = True    
 if args.printfunc:
-	funclist = getFuncHashes(args.printfunc[0], debug) 
+	funclist = getFuncHashes(args.printfunc[0], MyGlobals.debug) 
 	print_function_name(funclist)
 if args.nsolutions:
-	nsolutions = int(args.nsolutions[0])
+	MyGlobals.max_solutions = int(args.nsolutions[0])
 if args.maxTimeHB:
 	MyGlobals.ONE_HB_TIMEOUT = int(args.maxTimeHB[0])	
 if args.balances:
-	criteria = 0       
+	MyGlobals.criteria = 0       
 if args.blockchain:
-	read_from_blockchain = True
+	MyGlobals.read_from_blockchain = True
 if args.atblock:
 	global STORAGE_AT_BLOCK
 	MyGlobals.STORAGE_AT_BLOCK = int(args.atblock[0])
@@ -301,7 +344,7 @@ if args.par:
 	core_id = args.par[0]
 	core_no = args.par[1]
 	contract_list = args.par[2]
-	exec_main(core_id,core_no, contract_list, read_from_blockchain )
+	exec_main(core_id,core_no, contract_list, MyGlobals.read_from_blockchain )
 
 # elif args.insert:
 

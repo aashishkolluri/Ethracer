@@ -3,6 +3,7 @@ import copy
 from z3 import *
 import datetime
 
+
 def optimize_hb(hb_list):
 	simplified_hb = []
 
@@ -52,11 +53,12 @@ def set_params(param, input, value):
 	MyGlobals.st[param+str(input)] = value		
 
 # Create a dict of paramters
-def initialize_params(read_from_blockchain, c_address, nsolutions):
+# def initialize_params(read_from_blockchain, c_address, nsolutions):
+def initialize_params(c_address):
 
 	# Set (dummy) values for parameters often used in the contracts
 	global st
-	MyGlobals.max_solutions = nsolutions
+	# MyGlobals.max_solutions = nsolutions
 	MyGlobals.st = {}
 	MyGlobals.st['my_address'] = ('6' * 40).zfill(64)
 	MyGlobals.st['contract_address'] = c_address
@@ -200,6 +202,11 @@ class MyGlobals(object):
 	# Determines number of nodes traversed through
 
 	notimplemented_ins = {}
+
+	debug = False
+	debug1 = False
+	criteria = 1
+	read_from_blockchain = True
 
 def clear_globals():
 
