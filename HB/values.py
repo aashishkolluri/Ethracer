@@ -16,8 +16,6 @@ def optimize_hb(hb_list):
 				simplified_hb.append(copy.deepcopy(item))
 	return simplified_hb			
 
-
-
 # Read storage value
 def get_storage_value( address, index, read_from_blockchain = False ):
 
@@ -28,14 +26,12 @@ def get_storage_value( address, index, read_from_blockchain = False ):
 			web3 = Web3(KeepAliveRPCProvider(host='127.0.0.1', port='8545'))
 
 		if MyGlobals.STORAGE_AT_BLOCK >= 0:
-			# print('Accessing contract storage at ', index)
 			value = web3.eth.getStorageAt( address, index, MyGlobals.STORAGE_AT_BLOCK )
 		else:
 			value = web3.eth.getStorageAt( address, index )
 		return value
 	else:
 		return '0'.zfill(64)
-
 
 # Get value 
 def get_params(param, input):
@@ -55,7 +51,6 @@ def set_params(param, input, value):
 	global st
 	MyGlobals.st[param+str(input)] = value		
 
-
 # Create a dict of paramters
 def initialize_params(read_from_blockchain, c_address, nsolutions):
 
@@ -65,10 +60,6 @@ def initialize_params(read_from_blockchain, c_address, nsolutions):
 	MyGlobals.st = {}
 	MyGlobals.st['my_address'] = ('6' * 40).zfill(64)
 	MyGlobals.st['contract_address'] = c_address
-	# if read_from_blockchain:
-	# 	web3 = Web3(KeepAliveRPCProvider(host='127.0.0.1', port='8545'))
-	# 	MyGlobals.st['contract_balance'] = str(web3.eth.getBalance(c_address)+1).zfill(64)
-	# else:
 	MyGlobals.st['contract_balance'] = '7' * 64
 	MyGlobals.st['gas'] = ('765432').zfill(64)
 	MyGlobals.st['gas_limit'] = ('%x' % 5000000).zfill(64)
@@ -77,14 +68,9 @@ def initialize_params(read_from_blockchain, c_address, nsolutions):
 	MyGlobals.st['block_number'] = ('545454').zfill(64)
 	MyGlobals.st['caller'] = [('11' * 20).zfill(40), ('22' * 20).zfill(40)]
 
-
-
-
 def print_params():
-
 	for s in MyGlobals.st:
 		print('%20s : %s' % (s, str(MyGlobals.st[s])))
-
 
 def update_global_datastructures(stack, storage, sha3_dict, sha3_values, data) :
 	MyGlobals.datastructures['stack'] = copy.deepcopy(stack)
@@ -93,24 +79,19 @@ def update_global_datastructures(stack, storage, sha3_dict, sha3_values, data) :
 	MyGlobals.datastructures['data'] = copy.deepcopy(data)
 	MyGlobals.datastructures['sha3_values'] = copy.deepcopy(sha3_values)
 
-
 def create_configuration( stack, mmemory, storage):
-	
 	nc = {}
 	nc['stack']   = copy.deepcopy(stack)
 	nc['mmemory'] = copy.deepcopy(mmemory)
 	nc['storage'] = copy.deepcopy(storage)
-	
 	return nc
 	
 def add_configuration( step, configurations, nc):
-	
 	if step in configurations: configurations[step].append( nc )
 	else:configurations[step] = [nc]
 	
 
 def configuration_exist(step, configurations, nc):
-
 	if step not in configurations:
 		return False
 	
@@ -130,7 +111,6 @@ def configuration_exist(step, configurations, nc):
 		break
 		
 	return found 
-	
 	
 def seen_configuration( configurations, ops, position, stack, mmemory, storage):
 
@@ -152,7 +132,6 @@ def print_configuration( conf ):
 
 
 class MyGlobals(object):
-
 
 	# STORAGE_AT_BLOCK = -1
 	STORAGE_AT_BLOCK = 4350000
@@ -218,7 +197,7 @@ class MyGlobals(object):
 
 	num_solver_calls = 0
 	total_time_solver = 0
-	# DEtermines number of nodes traversed through
+	# Determines number of nodes traversed through
 
 	notimplemented_ins = {}
 

@@ -14,6 +14,11 @@ import shlex
 import re
 import time
 
+''' 
+Debug API: All the print functions below are used for pretty-printing/debugginga
+'''
+
+# Print execution stack during runtime.
 def print_stack(stack):
 	print('\033[90m------------------------------------- STACK -------------------------------------')
 	for s in stack[::-1]:
@@ -24,6 +29,7 @@ def print_stack(stack):
 			print('%10s : %4x  ' % (s['type'],s['step']) )
 	print('\033[0m')
 
+# Print global storage of the contract during runtime
 def print_storage(storage):
 	print('************************************ STORAGE ************************************')
 	for fl in storage:
@@ -32,6 +38,7 @@ def print_storage(storage):
 			if is_bv_value( simplify(s['z3'])): print('%x' % (simplify(s['z3']).as_long() ) )
 			else: print('%s' % (simplify(s['z3']) ) )
 
+# Print memory of the contract during runtime.
 def print_memory(mmemory):
 	print('************************************ MEMORY ************************************')
 	for m in mmemory:
@@ -40,7 +47,8 @@ def print_memory(mmemory):
 		if execute_instruction.is_undefined(fl): print('undefined' )
 		elif is_bv_value( simplify(fl['z3'])): print('%x' % (simplify(fl['z3']).as_long() ) )
 		else: print('%s' % (simplify(fl['z3']) ) )            
-		
+
+# Print sha3_dict which is used in SHA3 opcode implementation. (Debugging purpose)		
 def print_sha3(sha3_dict):
 	print('************************************ SHA3 addresses ************************************')
 	for m in sha3_dict:
@@ -50,7 +58,7 @@ def print_sha3(sha3_dict):
 			if isinstance(each, int) or isinstance(each, long):
 				print(hex(each).rstrip('L').lstrip('0x') + ' ,')
 			
-
+# Print sha3_values which is used in SHA3 opcode implementation. (Debugging purpose)		
 def print_sha3_values(sha3_values):
 	print('************************************ SHA3 concrete values ************************************')
 	for m in sha3_values:
@@ -59,14 +67,14 @@ def print_sha3_values(sha3_values):
 		for each in fl:
 			print(hex(each).rstrip('L').lstrip('0x') + ' ,')
 
-
+# Print the execution trace.
 def print_trace(trace):
 
 	print('++++++++++++++++++++++++++++ Trace ++++++++++++++++++++++++++++')
 	for o in trace:
 		print('%6x  : %2s : %12s : %s' % (o['id'],o['op'],o['o'] , o['input']) )
 
-
+# Print contract function names.
 def print_function_name(funclist, f=False):
 	if not f:
 		print('++++++++++++++++++++++++++++ Functions List ++++++++++++++++++++++++++++')
@@ -78,6 +86,7 @@ def print_function_name(funclist, f=False):
 		for function_name, funchash in funclist:
 			f.write('%s %30s : %8s' % (function_name, '\t', funchash) + '\n')           
 
+# Print the final solution in the raw form {(symbolic variable, value),}
 def print_solution(function1, function2, fn1, fn2, sol_dict):
 
 	print('\033[92m ******************* HB: %s , %s : %s , %s  \033[92m *******************\033[0m' % (fn1, fn2, function1, function2))
@@ -91,6 +100,7 @@ def print_solution(function1, function2, fn1, fn2, sol_dict):
 			for lists in value:
 				print('%-20s : %s' % (lists[0],str(lists[1])) )
 
+# Print the final nodes output by static analysis.
 def print_nodes(nodes, f = False):
 	if not f:
 		print('++++++++++++++++++++++++++++ Final Nodes ++++++++++++++++++++++++++++')
@@ -114,6 +124,7 @@ def print_nodes(nodes, f = False):
 						value = hex(value).rstrip('L').lstrip('0x')
 					f.write(key + '%10s'%('\t')+ ' -------> ' + value + '\n')
 
+# Print the final nodes output by static analysis. (just a variant of previous method used to extract final nodes from a list instead of a dictionary)
 def print_nodes_list(nodes, f = False):
 	if not f:
 		print('++++++++++++++++++++++++++++ Final Nodes ++++++++++++++++++++++++++++')
@@ -139,11 +150,43 @@ def print_nodes_list(nodes, f = False):
 						value = hex(value).rstrip('L').lstrip('0x')
 					f.write(key + '%10s'%('\t')+ ' -------> ' + value + '\n')	
 
-
+# Print if an instruction has not been implemented.
 def print_notimplemented():
 	for key, value in MyGlobals.notimplemented_ins.iteritems():
 		print(key + ' :: ' + str(value))			
 
+# Used for debugging purposes.
+def safe_subprocess(a1, a2, max_tries, wait_time):
+
+	FNULL = open(os.devnull, 'w')
+	try_no = 0
+	while True:
+		try:
+			solc_p = subprocess.Popen(shlex.split(a1 % a2), stdout = subprocess.PIPE, stderr=FNULL)
+		except Exception as e:
+			print('Exception:', e)
+			time.sleep(wait_time)
+			try_no +=1
+			if try_no >= max_tries:
+				print('Cannot pass the exception')
+				print('Called subprocess with args:',a1,a2)
+				exit(1)
+			continue
+		break
+
+	return solc_p
+
+
+'''
+Debug API ends.......
+'''
+
+
+'''
+Helper functions 
+'''
+
+# converts a hexadecimal string to integer.
 def convert_hexStr_to_int(hexStr):
 	longNum = 0
 	if isinstance(hexStr, str):
@@ -151,6 +194,7 @@ def convert_hexStr_to_int(hexStr):
 	
 	return	int(longNum)
 
+# converts an integer into a hexadecimal string.
 def convert_int_to_hexStr(number):
 	hexStr = ''
 	if not isinstance(number, str):
@@ -158,12 +202,16 @@ def convert_int_to_hexStr(number):
 
 	return hexStr.lstrip('0x').rstrip('L')	
 
+# remove the 0x from the string.
 def remove0x(string):
 	if string[0:2] == '0x':
 		string = string[2:]
 	
 	return string
-		
+
+# This function is used to find blockumber from which the initial contract state has to be chosen.
+# by default the state is taken from the blocknumber right after contract creation. If the variable owner_last 
+# is set then the state is taken from blocknumber after all the initialization done by owner after conntract creation.
 def find_blockNumber(contract_address, owner_last = False):
 	dbcon = sqlite3.connect('/mnt/d/mnt_c/contract-main.db')
 
@@ -189,27 +237,6 @@ def find_blockNumber(contract_address, owner_last = False):
 				break	
 
 	return last_block+1		
-
-def safe_subprocess(a1, a2, max_tries, wait_time):
-
-	FNULL = open(os.devnull, 'w')
-	try_no = 0
-	while True:
-		try:
-			solc_p = subprocess.Popen(shlex.split(a1 % a2), stdout = subprocess.PIPE, stderr=FNULL)
-		except Exception as e:
-			print('Exception:', e)
-			time.sleep(wait_time)
-			try_no +=1
-			if try_no >= max_tries:
-				print('Cannot pass the exception')
-				print('Called subprocess with args:',a1,a2)
-				exit(1)
-			continue
-		break
-
-	return solc_p
-
 
 # convert the solidity code into bytecode and then produce hashes
 def getFuncHashes(sol_file, debug):
@@ -244,26 +271,7 @@ def getFuncHashes(sol_file, debug):
 	solc_out1 = solc_p1.communicate()
 	solc_str = solc_out1[0].lstrip('\n').rstrip('\n')
 
-#	print(solc_str)
 	if not solc_str=='':
-		'''
-		for contract in solc_str.split('\n\n'):
-			
-			if len(contract)>0:
-				functions = contract.split('\n')
-				
-				if functions[0] == '======= '+max_cname+' =======':
-
-					for i in range(2, len(functions)):
-						temp_list = functions[i].split(': ')
-						fhash = temp_list[0]
-						fname = temp_list[1]
-						funclist.append([fname, fhash])
-
-			else:
-				print('No functions in sol code\n')
-				return []
-		'''
 		pass
 	else:
 		print('No solidity code in file\n')    				
@@ -289,6 +297,7 @@ def get_hash(txt):
 	k.update(txt.encode('utf-8'))
 	return int(k.hexdigest(),16)
 
+# get the function hashes heuristically instead of using any solidity API.
 def get_func_hashes(binfile):
 
 	complete_disasm = script.disasm(binfile, 0)
@@ -312,7 +321,7 @@ def get_func_hashes(binfile):
 						funclist.append([i-1, hexc])
 	return funclist		
 
-# returns True wohen a solution should be accepted
+# returns True wohen a solution should be accepted. This function filters out the duplicate and unwanted solutions.
 def solution_filter(solution, function1, function2):
 	keys = []
 	for key, value in solution.iteritems():
@@ -340,7 +349,7 @@ def solution_filter(solution, function1, function2):
 
 	return False					
 
-# Determines the TX inputs so that the contract can be exploited
+# Determines the TX inputs i.e., solves the symbolic constraints to give solutions of nodes.
 def get_function_calls( calldepth, key, function_hash, function1, function2, debug ):
 
 	global s, d, no_function_calls, function_calls
@@ -360,8 +369,6 @@ def get_function_calls( calldepth, key, function_hash, function1, function2, deb
 		temp_solver.add(MyGlobals.s2.assertions())
 		temp_solver.add(MyGlobals.s.assertions())	
 	
-	# print(temp_solver)	
-	# print('Number of stored configurations.. \t', len(MyGlobals.solver_configurations))
 	satisfied = False	
 	if temp_solver in MyGlobals.solver_configurations:
 		satisfied = MyGlobals.solver_configurations[temp_solver]
@@ -369,7 +376,6 @@ def get_function_calls( calldepth, key, function_hash, function1, function2, deb
 		print('found solution1')
 
 	else:
-		# print(MyGlobals.s, '\n','-'*60)
 		if temp_solver.check() == sat:
 			satisfied = True
 			MyGlobals.solver_configurations[temp_solver] = satisfied
@@ -379,11 +385,10 @@ def get_function_calls( calldepth, key, function_hash, function1, function2, deb
 			MyGlobals.solver_configurations[temp_solver] = satisfied		
 
 	if satisfied:
-		# print('satisfied\n')
 		time2 = datetime.datetime.now()
 		MyGlobals.total_time_solver+=(time2-time1).total_seconds()
 		m = temp_solver.model()
-		# print(m)
+
 		if debug: print('\nSolution:')
 		sol = {}
 		for d in m:
@@ -460,7 +465,6 @@ def get_function_calls( calldepth, key, function_hash, function1, function2, deb
 	else:
 		time2 = datetime.datetime.now()
 		MyGlobals.total_time_solver+=(time2-time1).total_seconds()
-		# MyGlobals.no_function_calls = 0
 		return False
 
 

@@ -14,7 +14,6 @@ from op_exec import print_balance_difference, pad_address
 def preprocess(contract_address, trace_new, nodes):
 # Clear all parameters
 	op_exec.clear_params()
-	# print (contract_address)
 	op_exec.set_params('contract_address','',contract_address )
 
 	# Set balances
