@@ -223,7 +223,6 @@ def exec_contract(sol_file, c_address):
 
 
 	# Find the correct way to give input to the fuzzer.
-	# check_all_traces( [], 5, node_list, simplified_hb, [], balances, c_address, contract_bytecode, disasm, debug1, read_from_blockchain )
 	print('\nNodes_list_old ',node_list, '\n')
 	new_nodes_list, new_simplified_hb = optimize_nodes(node_list, simplified_hb, c_address, disasm, debug, MyGlobals.read_from_blockchain, MyGlobals.STORAGE_AT_BLOCK)
 	print('\nNodes_list_optimized ',new_nodes_list, '\n')

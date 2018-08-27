@@ -30,6 +30,7 @@ class WHBFinder:
 		self._funclist = funclist
 		self._read_from_blockchain = read_from_blockchain
 
+	''' Changes the context into a suitable format. '''
 	def changeContext(self, key, value):
 		print ('%-20s :  %s ' % (key, str(value)) )
 		if not ('input' in key and not 'inputlength' in key):
@@ -95,10 +96,7 @@ class WHBFinder:
 		return key, value
 
 
-
-
-
-	# def check_one_contract(self, self._contract_bytecode, contract_address, debug, funclist, read_from_blockchain, par = False, que = None):
+	''' Responsible for finding the important function pairs which may have a wHB relationnship and executing them'''
 	def check_one_contract(self, par = False, que = None):
 		a = datetime.datetime.now()
 
@@ -152,7 +150,7 @@ class WHBFinder:
 		return temp_node_list, simplified_hb	
 
 
-	# def check_one_function_on_execute(self, self._contract_bytecode, contract_address, function1, function2, fn1, fn2, debug, read_from_blockchain):
+	''' Called by check_one_contract and is responsible for checking wHB relationship for oe function pair'''	
 	def check_one_function_on_execute(self, function1, function2, fn1, fn2):
 
 		global fast_search, MAX_JUMP_DEPTH, MAX_CALL_DEPTH, symbolic_vars, good_jump_positions, solution_dict, max_solutions, solution_found	
@@ -233,7 +231,7 @@ class WHBFinder:
 
 		return {}
 
-	# def find_nodes(self, function_pairs_list, funclist, solution_dict, self._contract_bytecode, contract_address, debug, read_from_blockchain):
+	''' utility function which extracts the final nodes/events and their simplified HB relations '''
 	def find_nodes(self, function_pairs_list, funclist, solution_dict):
 		functionsHBList = []
 		
