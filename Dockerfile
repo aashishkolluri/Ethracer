@@ -40,4 +40,4 @@ EXPOSE 80
 
 #RUN cd /ethracer/HB && python3.6 main.py --checkone /mnt/c/contracts_solidity/0x325476448021c96c4bf54af304ed502bb7ad0675.sol 0x325476448021c96c4bf54af304ed502bb7ad0675 --blockchain --owner 0x056682f1cf0dc48266c1e47057297a64b58bb6fa
 # have to configure IP tables with ---> iptables -A INPUT -i docker0 -j ACCEPT; and then start docker with ---> sudo docker run --net='host' -it ethracer; 
-#sudo docker build -t ethracer  && sudo docker run --net='bridge' -it ethracer bash
+#sudo docker build -t ethracer  && sudo docker run --net='host' -it ethracer bash
