@@ -217,7 +217,7 @@ if args.blockchain:
 if args.atblock:
 	MyGlobals.STORAGE_AT_BLOCK = int(args.atblock[0])
 
-elif args.checkone:
+if args.checkone:
 	if args.owner:
 		exec_contract(args.checkone[0], args.checkone[1], args.owner[0])
 	else:

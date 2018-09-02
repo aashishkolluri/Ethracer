@@ -73,6 +73,17 @@ class EVMCoreHelper:
 # EVMCore simulates execution of each instruction and generates symbolic constraints using the actual EVM semantics. 
 
 class EVMCore(EVMCoreHelper):
+	'''
+	* Implements logic to handle each instruction in defferent phases of static analysis.
+		
+		1) Search enhance phase with global storage not symbolic.
+		2) Search enhance phase with global storage symbolic.
+		2) Actual event finding phase.
+	
+	* Propogates rules differently for different phases for each instruction.
+	* Constructs datastructure of R/W locations of each function for search enhance phase.
+
+	'''
 
 	# Private function for processing instructions involving operation on a single input argument.	
 	def _unary(self, o1, step, op='NONE' ):
@@ -176,7 +187,7 @@ class EVMCore(EVMCoreHelper):
 
 	# Public function which facillitates execution of each instruction and genration of symbolic constraints.		
 	def execute(self, code, stack, pos, storage, mmemory, data, trace, calldepth, function_hash, actual_key, search_enhance, debug, read_from_blockchain  ):
-		
+
 		# Stop the search once it exceeds timeout
 		time_now = datetime.datetime.now()
 		if MyGlobals.ONE_HB_TIMEOUT < int((time_now - MyGlobals.Time_checkpoint).total_seconds()):
@@ -847,6 +858,3 @@ class EVMCore(EVMCoreHelper):
 			exit(2)
 
 		return pos + 1, halt
-
-
-

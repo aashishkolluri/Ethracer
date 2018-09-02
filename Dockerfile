@@ -41,7 +41,7 @@ ENV PYTHONPATH "${PYTONPATH}:/dependencies"
 RUN apt-get install -y python-pip python3-pip musl-dev pandoc && pip3 install --upgrade setuptools
 RUN python3.6 -m pip install requests web3 pysha3
 EXPOSE 80
-#RUN cd /ethracer/HB && python3.6 main.py --checkone /mnt/c/contracts_solidity/0x325476448021c96c4bf54af304ed502bb7ad0675.sol 0x325476448021c96c4bf54af304ed502bb7ad0675 --blockchain --owner 0x325476448021c96c4bf54af304ed502bb7ad0675
+#RUN cd /ethracer/HB && python3.6 main.py --checkone /mnt/c/contracts_solidity/0x325476448021c96c4bf54af304ed502bb7ad0675.sol 0x325476448021c96c4bf54af304ed502bb7ad0675 --blockchain --owner 0x056682f1cf0dc48266c1e47057297a64b58bb6fa
 
 # have to configure IP tables with ---> iptables -A INPUT -i docker0 -j ACCEPT; and then start docker with ---> sudo docker run --net='host' -it ethracer; 
 

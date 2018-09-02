@@ -10,22 +10,25 @@ class SearchEnhance:
 	'''
 	* This class filters out all the functions which do not change the state.
 	* It also filters functions which do not have a read write conflict with any other 
-		function for all shared global variables.
+		function for all shared global variables.	
 	'''
+
 	def cartesian(self, lists):
+
 		if lists == []: return [()]
 		return [x + (y,) for x in self.cartesian(lists[:-1]) for y in lists[-1]]
 
+	# Filters out all functions that do not change any state. Checking process is done in two stages for better code coverage.
+	# Stage1: Global storage is not symbolic i.e., the static analysis takes is carried out by taking global values from the blockchain.
+	# Stage2: Global storage is symbolic ie., the global values could take any value.	
+	# Finally returns a datastructure that stores all Read write locations of all functions.
 	def stateChangingFunctions(self, fullfunclist, contract_bytecode, contract_address, read_from_blockchain, debug):
-		global symbolic_vars, solution_found, stop_search, max_jumpdepth_in_normal_search
-
 
 		funclist = [temp[1] for temp in fullfunclist]
 		func_hash = {}
 		for f in fullfunclist:
 			if isinstance(f[0],str):
 				func_hash[f[1]]= f[0]
-
 
 		ops = parse_code( contract_bytecode, debug )
 		if not code_has_instruction( ops, ['STOP', 'RETURN']) :
@@ -35,7 +38,14 @@ class SearchEnhance:
 
 		impFunctionList = []
 		cnt = 0
+
+		# For each function find if the function has reads or writes to any global variable using static analysis.
 		for function_hash in funclist:
+			'''
+
+			** Stage 1
+			
+			'''
 			cnt +=1
 			MyGlobals.symbolic_vars = ['CALLVALUE', 'NUMBER', 'GASLIMIT', 'TIMESTAMP', 'ADDRESS', 'ORIGIN', 'BLOCKHASH', 'CALLER']
 			MyGlobals.solution_found = False
@@ -53,9 +63,10 @@ class SearchEnhance:
 			MyGlobals.solver_configurations.clear()
 			MyGlobals.Time_checkpoint = datetime.datetime.now()
 			MyGlobals.ONE_HB_TIMEOUT = 1*60
+
 			evmInstance = EVM(1, MyGlobals.max_jumpdepth_in_normal_search, True, contract_address, function1, function2, False, debug, read_from_blockchain)
 			importantFunc1 = evmInstance.run_one_check(ops, 1)
-			# importantFunc1 = run_one_check( 1, MyGlobals.max_jumpdepth_in_normal_search, True, ops, contract_address, function1, function2,  1, False, debug, read_from_blockchain )
+
 			t2 = datetime.datetime.now()
 			if MyGlobals.ONE_CONTRACT_HB_TIMEOUT < int((t2 - MyGlobals.Time_checkpoint_HB).total_seconds()):
 				return [], []	
@@ -66,16 +77,21 @@ class SearchEnhance:
 			MyGlobals.last_eq_func = -1
 			sys.stdout.flush()
 
-			
+			'''
+
+			** Stage 2
+
+			'''
 			MyGlobals.MAX_JUMP_DEPTH = 50
 			MyGlobals.MAX_VISITED_NODES = 2000
 			MyGlobals.set_storage_symbolic = True			
 			MyGlobals.solver_configurations.clear()
 			MyGlobals.Time_checkpoint = datetime.datetime.now()
 			MyGlobals.ONE_HB_TIMEOUT = 1*60
+
 			evmInstance = EVM(1, MyGlobals.max_jumpdepth_in_normal_search, True, contract_address, function1, function2, False, debug, read_from_blockchain)
 			importantFunc2 = evmInstance.run_one_check(ops, 1)
-			# importantFunc2 = run_one_check( 1, MyGlobals.max_jumpdepth_in_normal_search, True, ops, contract_address, function1, function2,  1, False, debug, read_from_blockchain )
+
 			t2 = datetime.datetime.now()
 			if MyGlobals.ONE_CONTRACT_HB_TIMEOUT < int((t2 - MyGlobals.Time_checkpoint_HB).total_seconds()):
 				return [], []
@@ -95,6 +111,7 @@ class SearchEnhance:
 		return self.stateChangingFunctionPairs(impFunctionList)
 
 
+	# Checks if a function has R/W conflict with any other state changing function.
 	def stateChangingFunctionPairs(self, impFunctionList):
 
 		function_pairs_list = self.cartesian([impFunctionList, impFunctionList])
@@ -119,5 +136,4 @@ class SearchEnhance:
 
 									
 		return newfunclist, new_list	
-
 

@@ -95,10 +95,10 @@ class WHBFinder:
 		return key, value
 
 
-	# Responsible for finding the important function pairs which may have a wHB relationnship and executing them
+	# Responsible for finding the important function pairs which may have a wHB relationship, and executing them.
 	def check_one_contract(self, par = False, que = None):
-		a = datetime.datetime.now()
 
+		a = datetime.datetime.now()
 		if len(self._contract_bytecode) <= 2:
 			print('Contract bytecode is too short:\n\tlen:%d\n\tbytecode:%s' % (len(self._contract_bytecode), self._contract_bytecode) )
 			return False
@@ -125,6 +125,7 @@ class WHBFinder:
 		for fp in function_pairs_list:
 			print('%10s , %10s  :  %s  , %s' % (fp[0],fp[1], func_hash[fp[0]] if fp[0] in func_hash else fp[0], func_hash[fp[1]] if fp[1] in func_hash else fp[1]))
 
+		# Analyze each function pair individually. 	
 		cnt = 0
 		for pair in function_pairs_list:
 			if pair[0]!=pair[1]:
@@ -137,7 +138,7 @@ class WHBFinder:
 				cnt +=1
 				print('\nProcess %3d / %d pair ' % (cnt, len(function_pairs_list)))
 				
-				# find concrete values for fields in each event pair.
+				# find concrete events for each function pair.
 				solution =  self.check_one_function_on_execute(pair[0], pair[1], func_hash[pair[0]] if pair[0] in func_hash else pair[0], func_hash[pair[1]] if pair[1] in func_hash else pair[1])
 				solution_dict[(pair[0], pair[1])] = solution
 				t2 = datetime.datetime.now()
@@ -154,11 +155,10 @@ class WHBFinder:
 		return temp_node_list, simplified_hb	
 
 
-	''' Called by check_one_contract and is responsible for checking wHB relationship for one function pair'''	
+	# Responsible for checking wHB relationship for one function pair
 	def check_one_function_on_execute(self, function1, function2, fn1, fn2):
 
-		global MAX_JUMP_DEPTH, MAX_CALL_DEPTH, symbolic_vars, solution_dict, max_solutions, solution_found	
-
+		# The compiled code should have STOP or RETURN instructions.
 		ops = parse_code( self._contract_bytecode, self._debug )
 		if not code_has_instruction( ops, ['STOP', 'RETURN']) :
 			print('\033[91m[-] The code does not have STOP or RETURN\033[0m')
@@ -167,12 +167,13 @@ class WHBFinder:
 
 		print('\033[95m[ ] Finding HB for the pair  %s ,  %s :   %s , %s  \033[0m'%(fn1, fn2, function1, function2) )
 
-		# Make the amount of sent Ether symbolic variable (can take any value)
+		# Set the given event field to be symbolic
 		MyGlobals.symbolic_vars = ['CALLVALUE', 'NUMBER', 'GASLIMIT', 'TIMESTAMP', 'ADDRESS', 'ORIGIN', 'BLOCKHASH', 'BALANCE', 'CALLER']
 		MyGlobals.solution_found = False
 		MyGlobals.search_condition_found = False
 		MyGlobals.stop_search = False
 
+		# noHB is used in a function pair to generate events for a single function. For Eg: (function1, noHB)
 		if function2 == 'noHB':
 			evmInstance = EVM(1, MyGlobals.max_jumpdepth_in_normal_search, False, self._contract_address, function1, function2, True, self._debug, self._read_from_blockchain)
 			evmInstance.run_one_check(ops, 1)
@@ -186,6 +187,7 @@ class WHBFinder:
 		
 		soldict = {}
 
+		# Get the concrete values of event fields if static analysis finds wHB relation for an event pair.
 		if (function1, function2) in MyGlobals.solution_dict:
 			print('\033[92m[+] Final Solution found \033[0m \n')
 			i = 0
@@ -222,9 +224,8 @@ class WHBFinder:
 								mydict[function2].append((key, value))	
 
 
-				soldict[i] = mydict	
-
-
+				soldict[i] = mydict
+			
 			print_solution(function1, function2, fn1, fn2, soldict)
 		else:
 			print('\033[91m[-] No HB found for %s , %s  : %s , %s\033[0m ' % (fn1, fn2, function1, function2) )
@@ -232,13 +233,12 @@ class WHBFinder:
 		if MyGlobals.stop_search: 
 			return soldict
 
-
 		return {}
 
-	''' utility function which extracts the final nodes/events and their simplified HB relations '''
+	# utility function which extracts the final nodes/events and their simplified HB relations
 	def find_nodes(self, function_pairs_list, funclist, solution_dict):
-		functionsHBList = []
 		
+		functionsHBList = []		
 		for pair in function_pairs_list:
 			if (pair[0], pair[1]) in MyGlobals.solution_dict:
 				
@@ -299,7 +299,6 @@ class WHBFinder:
 		
 					if reverse:
 						hb_list.append((pair[1], pair[0]))
-
 					else:
 						hb_list.append(pair)	
 

@@ -1,5 +1,4 @@
 from __future__ import print_function
-import os
 import sys
 import re
 from execute_instruction import *
@@ -97,7 +96,6 @@ class EVM(EVMCore):
 		return datastructures
 
 
-
 	'''
 		Finding weak HB between function1, function2 happens in four phases. 
 		1 -----> function1 terminates.
@@ -109,10 +107,7 @@ class EVM(EVMCore):
 		Hence, the values of key could be 1, 2, 3, 4. 
 		It calls into execute_one_block for symbolic analysis of each phase.
 	''' 		
-
 	def  run_one_check(self, ops, key, datastructures = {}):
-
-		global MAX_JUMP_DEPTH, MAX_CALL_DEPTH, fast_search, search_condition_found, solution_found
 
 		# Stop the search once it exceeds timeout
 		time_now = datetime.datetime.now()
@@ -124,7 +119,11 @@ class EVM(EVMCore):
 		MyGlobals.MAX_JUMP_DEPTH 	= self.max_jump_depth
 		MyGlobals.MAX_CALL_DEPTH 	= self.max_call_depth
 		configurations = {}
+		'''
 
+		** Phase 1
+
+		'''
 		if 1 == key:
 			print('[ ] Started executing 1st tree... ')
 			clear_globals()
@@ -159,7 +158,12 @@ class EVM(EVMCore):
 			print('\033[92m    Visited %d nodes\033[0m'%(MyGlobals.visited_nodes))
 			return
 			function_hash = self.function2
-		
+
+		'''
+
+		** Phase 2
+
+		'''
 		if 2 == key:
 			print('\033[92m    Visited %d nodes\033[0m'%(MyGlobals.visited_nodes))
 			print('[ ] Started executing 2nd tree... ')
@@ -192,6 +196,11 @@ class EVM(EVMCore):
 
 			return
 
+		'''
+
+		** Phase 3
+
+		'''
 		if 3 == key:
 			print('\033[92m    Visited %d nodes\033[0m'%(MyGlobals.visited_nodes))	
 			print('[ ] Started executing 3rd tree... ')
@@ -237,6 +246,11 @@ class EVM(EVMCore):
 
 			return
 
+		'''
+
+		** Phase 4
+
+		'''	
 		if 4 == key:
 			print('\033[92m    Visited %d nodes\033[0m'%(MyGlobals.visited_nodes))
 			print('[ ] Started executing 4th tree... ')
@@ -268,6 +282,7 @@ class EVM(EVMCore):
 			return
 
 		return		
+
 		
 	'''
 		This function is called by run_one_check function and is in mutual recursion with it.
@@ -277,9 +292,7 @@ class EVM(EVMCore):
 		2) When the time limit exceeds.
 		3) When jumpdepth limit is reached.
 		4) When node limit is reached.
-	'''	
-
-
+	'''
 	def execute_one_block(self, ops , stack , pos , trace, storage, mmemory, data, configurations,  sha3_dict,  sha3_values, search_op, search_function, jumpdepth, calldepth, function_hash, find_solution,  key):
 
 		sys.stdout.flush()
@@ -305,12 +318,10 @@ class EVM(EVMCore):
 			MyGlobals.stop_search = True
 			return	
 			
-		# Execute the next block of operations
+		# Execute the next block of operations.
 		first = True
 		newpos = pos
 		while (first or newpos != pos) and not MyGlobals.stop_search:
-
-
 			first = False
 			pos = newpos	
 				
@@ -336,21 +347,7 @@ class EVM(EVMCore):
 				if self.debug:print ('\033[95m[-] Reach MAX_CALL_DEPTH\033[0m' )
 				return
 
-
-
-
-			# Check if configuration exist if 
-			# - it is the first instruction in the code (the code restarted)
-			# - it is jumpdest
-			# - it is the first instruction after JUMPI 
-			# if pos == 0 or ops[pos]['o'] == 'JUMPDEST' or (pos > 0 and ops[pos-1]['o'] == 'JUMPI'):
-			# 	if seen_configuration( configurations, ops, pos, stack, mmemory, storage): 
-			# 		if self.debug:print ('\033[95m[-] Seen configuration\033[0m' )
-			# 		return
-			
-		
-
-			# Check if the current op is one of the search ops
+			# Check if the current op is one of the search ops.
 			if ops[pos]['o'] in search_op:
 
 				if self.debug:
@@ -393,9 +390,6 @@ class EVM(EVMCore):
 					self.run_one_check(ops, key+1, datastructures)
 					MyGlobals.s.pop()
 					return
-
-
-
 
 				if MyGlobals.search_condition_found and (self.noHB or (key == 3 and find_solution) or key == 4) and find_solution:
 					solution = get_function_calls( calldepth, key, function_hash, self.function1, self.function2 ,self.debug )
@@ -460,8 +454,8 @@ class EVM(EVMCore):
 			
 				if self.debug: print('\033[94m[+] Halted on %s on line %x \033[0m' % (ops[pos]['o'],ops[pos]['id']))
 				
-				# if MyGlobals.stop_search: print('Search condition found \n')
-				# if not MyGlobals.stop_search: print('Search condition not found \n')									
+				# if MyGlobals.stop_search: Search condition found
+				# if not MyGlobals.stop_search: Search condition not found
 				# If normal stop 
 				if ops[pos]['o'] in ['STOP','RETURN','SUICIDE']:
 
@@ -514,7 +508,6 @@ class EVM(EVMCore):
 							if len(MyGlobals.solution_dict[(self.function1, self.function2)]) == MyGlobals.max_solutions:
 								MyGlobals.stop_search = True
 
-
 						return
 
 
@@ -550,9 +543,6 @@ class EVM(EVMCore):
 					#
 					# Branch when decision is incorrect (no need to compute the addresses)		
 					#
-
-					# In the fast search mode, the jumpi pos + 1 must be in the list of good jump positions
-					# if is_good_jump( ops, pos+1, self.debug ): 
 
 					MyGlobals.s.push()
 					MyGlobals.s.add( des['z3'] == 0)
@@ -660,10 +650,6 @@ class EVM(EVMCore):
 					if( new_position < 0):
 						if self.debug: print('\033[95m[-] The code has no such jump destination: %s at line %x\033[0m' % (hex(jump_dest), si['id']) )
 						return False
-
-
-					# In the fast search mode, the jumpi new_position must be in the list of good jump positions
-					# if is_good_jump( ops, new_position, self.debug ): 
 
 					MyGlobals.s.push()
 					MyGlobals.s.add( des['z3'] != 0)
@@ -906,6 +892,7 @@ class EVM(EVMCore):
 							MyGlobals.search_condition_found = False
 						return 
 
+				# It can be SHA3
 				elif si['o'] == 'SHA3':
 					
 					s1 = stack.pop()
@@ -1389,4 +1376,3 @@ class EVM(EVMCore):
 				else:
 					print('\033[95m[-] Unknown %s on line %x \033[0m' % (si['o'],ops[pos]['id']) )
 					return 
-

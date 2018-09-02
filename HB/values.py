@@ -85,6 +85,12 @@ def update_global_datastructures(stack, storage, sha3_dict, sha3_values, data) :
 	MyGlobals.datastructures['data'] = copy.deepcopy(data)
 	MyGlobals.datastructures['sha3_values'] = copy.deepcopy(sha3_values)
 
+
+'''
+
+Memoization using solver configurations.
+
+'''
 def create_configuration( stack, mmemory, storage):
 	nc = {}
 	nc['stack']   = copy.deepcopy(stack)
@@ -137,6 +143,9 @@ def print_configuration( conf ):
 		print_storage(c['storage'])
 
 
+'''
+Object initialized during runtime. This contains global context.
+'''
 class MyGlobals(object):
 
 	# STORAGE_AT_BLOCK = -1
