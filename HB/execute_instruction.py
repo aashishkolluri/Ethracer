@@ -14,6 +14,7 @@ from datetime import datetime
 from z3 import *
 import re
 from misc import *
+import codecs
 
 
 class EVMCoreHelper:
@@ -137,7 +138,7 @@ class EVMCore(EVMCoreHelper):
 			if is_bv_value(z1):
 				a = z1.as_long()
 				for function_pair in MyGlobals.functions:
-					if a==long(int(function_pair[1], 16)):
+					if a==(int(function_pair[1], 16)):
 						MyGlobals.last_eq_func = z1.as_long()
 						MyGlobals.last_eq_step = step      
 			
@@ -286,7 +287,7 @@ class EVMCore(EVMCoreHelper):
 
 			changed_offset = exact_address
 		
-			if (exact_offset - exact_address)/32 >= 2 : changed_offset = exact_offset/2
+			if (exact_offset - exact_address)//32 >= 2 : changed_offset = exact_offset//2
 		
 			if exact_address >= 0 and exact_offset >= 0:
 		
@@ -294,7 +295,7 @@ class EVMCore(EVMCoreHelper):
 					val = ''
 					all_good = True
 					sha3val = 0
-					for i in range(exact_offset/32):
+					for i in range(exact_offset//32):
 						if (exact_address + i*32) not in mmemory or not self.is_fixed(mmemory[exact_address+i*32]): 
 							all_good = False
 							break
@@ -303,7 +304,9 @@ class EVMCore(EVMCoreHelper):
 					if all_good:
 
 						k = keccak_256()
-						k.update(val.decode('hex'))
+						# print('hereee', val, '\n')
+						# k.update(val.decode('hex'))
+						k.update((codecs.decode(val, 'hex')))
 						digest = k.hexdigest()
 						res = {'type':'constant','step':step, 'z3':BitVecVal(int(digest,16), 256) }
 						sha3val = int(digest,16)
@@ -469,7 +472,7 @@ class EVMCore(EVMCoreHelper):
 
 
 				if value < 10000:
-					for i in range(value/32):
+					for i in range(value//32):
 						mmemory[addr + 32 * i] = { 'type':'undefined','step':step }
 
 
@@ -515,7 +518,7 @@ class EVMCore(EVMCoreHelper):
 					print('\033[95m[-] In CALLDATACOPY the length of array (%d) is not multiple of 32 \033[0m' % length )
 				return pos, True
 
-			for i in range( length / 32 ):
+			for i in range( length // 32 ):
 
 				data[ datapos + 32 * i ] = BitVec('input'+str(key)+'['+str(datapos + 32 * i )+']' +'-'+function_hash,256)
 				self.store_in_memory( mmemory, memaddr + 32 * i , {'type':'constant','step':step,'z3':data[ datapos + 32 * i ]} )
@@ -606,12 +609,12 @@ class EVMCore(EVMCoreHelper):
 			ea = self.get_value(addr)
 			ev = self.get_value(value) % 256
 
-			if (ea/32)*32 not in mmemory: 
-				mmemory[(ea/32)*32] = {'type':'constant','step':step, 'z3':BitVecVal(ev << (31- (ea%32)), 256) }
-			elif self.is_fixed( mmemory[(ea/32)*32]['z3'] ):
-				v = self.get_value( mmemory[(ea/32)*32]['z3'] )
+			if (ea//32)*32 not in mmemory: 
+				mmemory[(ea//32)*32] = {'type':'constant','step':step, 'z3':BitVecVal(ev << (31- (ea%32)), 256) }
+			elif self.is_fixed( mmemory[(ea//32)*32]['z3'] ):
+				v = self.get_value( mmemory[(ea//32)*32]['z3'] )
 				v = (v & (~BitVecVal(0xff,256) << (31- (ea%32)))) ^ (ev << (31- (ea%32)))
-				mmemory[(ea/32)*32]['z3'] = v
+				mmemory[(ea//32)*32]['z3'] = v
 
 
 		elif op == 'SLOAD':
@@ -661,7 +664,7 @@ class EVMCore(EVMCoreHelper):
 									MyGlobals.funcvardata[function_hash][each].append('R')    
 
 				else:
-					for key, value in MyGlobals.sha3vardata.iteritems():
+					for key, value in MyGlobals.sha3vardata.items():
 						if str(key) in str(addr):
 							for each in MyGlobals.sha3vardata[key]:
 								if not function_hash in MyGlobals.funcvardata:
@@ -696,7 +699,7 @@ class EVMCore(EVMCoreHelper):
 						return pos+1, False
 
 					value = get_storage_value ( get_params('contract_address',''), exact_address, read_from_blockchain )
-					t = {'type':'constant','step':step, 'z3': BitVecVal(int(value,16), 256) }
+					t = {'type':'constant','step':step, 'z3': BitVecVal(int.from_bytes(value, byteorder='big'), 256) }
 
 					storage[exact_address] = [ t ]
 					res = copy.deepcopy(t)
@@ -757,7 +760,7 @@ class EVMCore(EVMCoreHelper):
 
 				else:
 					se_addr = simplify(addr['z3'])
-					for key, value in MyGlobals.sha3vardata.iteritems():
+					for key, value in MyGlobals.sha3vardata.items():
 
 						if str(key) in str(se_addr):
 

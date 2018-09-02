@@ -199,7 +199,8 @@ def check_one_trace( contract_address, trace, storage, code, debug, read_from_bl
 					value= st[3]
 					fullvalue = get_storage_value( '0x%040x' % contract_address, addr, st_blocknumber, read_from_blockchain)
 					if fullvalue[0:2] == '0x': fullvalue = fullvalue[2:]
-					fullvalue = int(fullvalue,16)
+					# fullvalue = int(fullvalue,16)
+					fullvalue = int.from_bytes(fullvalue, byteorder='big')
 					newvalue  = (fullvalue & ( (2**256 - 1) ^ (0xff<<(8*index)))) ^ (value << (8*index))
 					storage[ addr ] = newvalue
 					# temp_storage[addr] = newvalue
@@ -378,11 +379,11 @@ def check_one_depth_all_traces( depth, nodes, hb, storage_predefined, balances, 
 				
 				for zz in range(2):
 
-				   if 0==zz and not same_state(all_storages[i], all_storages[j]) \
-					  or \
-					  1==zz and not same_balance(all_balances[i], all_balances[j]):
+					if 0==zz and not same_state(all_storages[i], all_storages[j]) \
+						or \
+						1==zz and not same_balance(all_balances[i], all_balances[j]):
 
-						 # Check if similar trace has already been seen
+						# Check if similar trace has already been seen
 						t1 = []
 						t2 = []
 						for t in range(len(i)):

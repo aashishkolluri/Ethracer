@@ -5,7 +5,9 @@ from op_list import *
 from op_parse import *
 from hashlib import *
 from sha3 import *
-from web3 import Web3, KeepAliveRPCProvider, IPCProvider
+from web3 import Web3
+import codecs
+# , KeepAliveRPCProvider, IPCProvider
 
 
 global st
@@ -156,10 +158,12 @@ def send_ether(addr_from, addr_to, amount):
 def get_storage_value( address, index, st_blocknumber, read_from_blockchain = False ):
 
 	if read_from_blockchain:
-		if st_blocknumber < 4350000:
-			web3 = Web3(KeepAliveRPCProvider(host='127.0.0.1', port='8666'))
-		else:
-			web3 = Web3(KeepAliveRPCProvider(host='127.0.0.1', port='8545'))
+		# if st_blocknumber < 4350000:
+			# web3 = Web3(KeepAliveRPCProvider(host='127.0.0.1', port='8666'))
+		web3 = Web3(Web3.HTTPProvider("http://127.0.0.1:8666"))
+		# else:
+		# 	# web3 = Web3(KeepAliveRPCProvider(host='127.0.0.1', port='8545'))
+		# 	web3 = Web3(Web3.HTTPProvider("http://127.0.0.1:8545"))
 
 		value = web3.eth.getStorageAt( address, index )
 		return value
@@ -265,8 +269,6 @@ def execute( code, stack, pos, storage, temp_storage, mmemory, data, st_blocknum
 	ret = False
 	step = code[pos]['id']
 
-	# print(op)
-	# print_stack(stack)
 
 
 	if op not in allops:
@@ -317,7 +319,8 @@ def execute( code, stack, pos, storage, temp_storage, mmemory, data, st_blocknum
 				if all_good:
 
 					k = keccak_256()
-					k.update(val.decode('hex'))
+					# k.update(val.decode('hex'))
+					k.update(codecs.decode(val, 'hex'))
 					digest = k.hexdigest()
 					res = int(digest,16) 
 
@@ -520,11 +523,13 @@ def execute( code, stack, pos, storage, temp_storage, mmemory, data, st_blocknum
 		else:
 			
 			if read_from_blockchain:
-				if st_blocknumber < 4350000:
-					web3 = Web3(KeepAliveRPCProvider(host='127.0.0.1', port='8666'))
+				# if st_blocknumber < 4350000:
+					# web3 = Web3(KeepAliveRPCProvider(host='127.0.0.1', port='8666'))
+				web3 = Web3(Web3.HTTPProvider("http://127.0.0.1:8666"))
 
-				if st_blocknumber >= 4350000:
-					web3 = Web3(KeepAliveRPCProvider(host='127.0.0.1', port='8545'))
+				# if st_blocknumber >= 4350000:
+					# web3 = Web3(KeepAliveRPCProvider(host='127.0.0.1', port='8545'))
+					# web3 = Web3(Web3.HTTPProvider("http://127.0.0.1:8545"))
 
 				contract_address = get_params('contract_address','')
 				contract_address_new = contract_address
@@ -536,7 +541,8 @@ def execute( code, stack, pos, storage, temp_storage, mmemory, data, st_blocknum
 				contract_address_new = pad_address(contract_address_new)
 				value = web3.eth.getStorageAt( contract_address_new , addr , st_blocknumber)
 				if value[0:2] == '0x': value = value[2:]
-				value = int(value,16)
+				# value = int(value,16)
+				value = int.from_bytes(value, byteorder='big')
 			else:
 				value = 0
 

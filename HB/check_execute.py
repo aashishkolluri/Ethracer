@@ -3,7 +3,6 @@ from parse_code import *
 import copy
 from values import get_params, set_params, initialize_params, print_params, MyGlobals, clear_globals, optimize_hb
 from execute_block import * 
-from cfg import *
 import z3 
 from z3 import *
 import datetime
@@ -14,14 +13,14 @@ from check import *
 import op_parse
 from search_enhance import SearchEnhance
 
-'''
-* WHBFinder finds the HB relations and outputs the final nodes which are fed to fuzzer(dynamic analysis step)
-* Function check_one_contract finds the important (state changing) functions and feeds each pair to check_one_function_on_execute function.
-* Function check_one_function_on_execute is responsible for finding the solutions for each wHB relation.
-* Function find_nodes extracts the final nodes and simplified HB relations from raw solutions.
-'''
 
 class WHBFinder:
+	'''
+	* WHBFinder finds the HB relations and outputs the final nodes which are fed to fuzzer(dynamic analysis step)
+	* Function check_one_contract finds the important (state changing) functions and feeds each pair to check_one_function_on_execute function.
+	* Function check_one_function_on_execute is responsible for finding the solutions for each wHB relation.
+	* Function find_nodes extracts the final nodes and simplified HB relations from raw solutions.
+	'''
 
 	def __init__(self, contract_bytecode, contract_address, debug, funclist, read_from_blockchain):
 		self._contract_bytecode = contract_bytecode
@@ -30,7 +29,7 @@ class WHBFinder:
 		self._funclist = funclist
 		self._read_from_blockchain = read_from_blockchain
 
-	''' Changes the context into a suitable format. '''
+	# Changes the context into a suitable format.
 	def changeContext(self, key, value):
 		print ('%-20s :  %s ' % (key, str(value)) )
 		if not ('input' in key and not 'inputlength' in key):
@@ -96,7 +95,7 @@ class WHBFinder:
 		return key, value
 
 
-	''' Responsible for finding the important function pairs which may have a wHB relationnship and executing them'''
+	# Responsible for finding the important function pairs which may have a wHB relationnship and executing them
 	def check_one_contract(self, par = False, que = None):
 		a = datetime.datetime.now()
 
@@ -108,10 +107,13 @@ class WHBFinder:
 		func_hash = {}
 		for f in self._funclist:
 			func_hash[f[1]]= f[0]
-
+	
 		print('Found functions:  \033[92m %d \033[0m\n' % len(self._funclist))
+
+		# Enhace the search by filtering out functions which are not necessary for analysis.
 		searchEnhancer = SearchEnhance()
 		impFunctionList, function_pairs_list  = searchEnhancer.stateChangingFunctions(self._funclist, self._contract_bytecode, self._contract_address, self._read_from_blockchain, self._debug)
+		
 		t2 = datetime.datetime.now()
 		if MyGlobals.ONE_CONTRACT_HB_TIMEOUT < int((t2 - MyGlobals.Time_checkpoint_HB).total_seconds()):
 			print('\n', '\033[91m-------Finding the HB relations timed out\033[0m', '\n')
@@ -134,6 +136,8 @@ class WHBFinder:
 				t1 = datetime.datetime.now()
 				cnt +=1
 				print('\nProcess %3d / %d pair ' % (cnt, len(function_pairs_list)))
+				
+				# find concrete values for fields in each event pair.
 				solution =  self.check_one_function_on_execute(pair[0], pair[1], func_hash[pair[0]] if pair[0] in func_hash else pair[0], func_hash[pair[1]] if pair[1] in func_hash else pair[1])
 				solution_dict[(pair[0], pair[1])] = solution
 				t2 = datetime.datetime.now()
@@ -145,15 +149,15 @@ class WHBFinder:
 		b = datetime.datetime.now()
 		print('Time for HB pairs: ', b-a, '\n', '--'*50, '\n' )
 
+		# Final unoptimized events.
 		node_dict, temp_node_list, simplified_hb = self.find_nodes(function_pairs_list, impFunctionList, solution_dict)
-
 		return temp_node_list, simplified_hb	
 
 
-	''' Called by check_one_contract and is responsible for checking wHB relationship for oe function pair'''	
+	''' Called by check_one_contract and is responsible for checking wHB relationship for one function pair'''	
 	def check_one_function_on_execute(self, function1, function2, fn1, fn2):
 
-		global fast_search, MAX_JUMP_DEPTH, MAX_CALL_DEPTH, symbolic_vars, good_jump_positions, solution_dict, max_solutions, solution_found	
+		global MAX_JUMP_DEPTH, MAX_CALL_DEPTH, symbolic_vars, solution_dict, max_solutions, solution_found	
 
 		ops = parse_code( self._contract_bytecode, self._debug )
 		if not code_has_instruction( ops, ['STOP', 'RETURN']) :
@@ -190,7 +194,7 @@ class WHBFinder:
 				i+=1
 				mydict ={}
 
-				for key, value in lists.iteritems():
+				for key, value in lists.items():
 					convert = True
 					if 'input' in key:
 						if 'inputlength' in key or not 'input-' in key:
@@ -260,14 +264,14 @@ class WHBFinder:
 		hb_list = []
 		simplified_hb = []
 		
-		for each_relation, solution_nodes in solution_dict.iteritems():
+		for each_relation, solution_nodes in solution_dict.items():
 
-			for index, node in solution_nodes.iteritems():
+			for index, node in solution_nodes.items():
 
-				for fhash, fctx in node.iteritems():
+				for fhash, fctx in node.items():
 					
 					found = False
-					for key, value in node_dict.iteritems():
+					for key, value in node_dict.items():
 						if value == {fhash:fctx}:
 							found = True
 
@@ -283,15 +287,15 @@ class WHBFinder:
 
 			if not each_relation[1] == 'noHB':
 				
-				for index, node in solution_nodes.iteritems():
+				for index, node in solution_nodes.items():
 					pair = ()
 					reverse = False
 					first = True
-					for fhash, fctx in node.iteritems():
+					for fhash, fctx in node.items():
 						if each_relation[1] == fhash and first:
 							reverse = True	
 						first = False	
-						pair += (node_dict.keys()[node_dict.values().index({fhash:fctx})] ,)
+						pair += (list(node_dict.keys())[list(node_dict.values()).index({fhash:fctx})] ,)
 		
 					if reverse:
 						hb_list.append((pair[1], pair[0]))

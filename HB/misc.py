@@ -55,7 +55,7 @@ def print_sha3(sha3_dict):
 		fl = sha3_dict[m]
 		print('\033[91m[ %64x ] \033[0m : ' % (m), end='' )        
 		for each in fl:
-			if isinstance(each, int) or isinstance(each, long):
+			if isinstance(each, int):
 				print(hex(each).rstrip('L').lstrip('0x') + ' ,')
 			
 # Print sha3_values which is used in SHA3 opcode implementation. (Debugging purpose)		
@@ -91,10 +91,10 @@ def print_solution(function1, function2, fn1, fn2, sol_dict):
 
 	print('\033[92m ******************* HB: %s , %s : %s , %s  \033[92m *******************\033[0m' % (fn1, fn2, function1, function2))
 	
-	for key, mydict in sol_dict.iteritems():
+	for key, mydict in sol_dict.items():
 
 		print('\033[93mSolution %s : \033[0m'%(str(key)))
-		for each, value in mydict.iteritems():
+		for each, value in mydict.items():
 			print('\nContext for \033[92m %s \033[0m'%(str(each)))
 
 			for lists in value:
@@ -104,23 +104,23 @@ def print_solution(function1, function2, fn1, fn2, sol_dict):
 def print_nodes(nodes, f = False):
 	if not f:
 		print('++++++++++++++++++++++++++++ Final Nodes ++++++++++++++++++++++++++++')
-		for index, node in nodes.iteritems():
+		for index, node in nodes.items():
 		# for node in nodes:
-			for func, ctx in node.iteritems():
+			for func, ctx in node.items():
 				print('\033[1m %s : %s \n \033[0m'%(str(index), func))
 				for (key, value) in ctx:
-					if isinstance(value, int) or isinstance(value, long):
+					if isinstance(value, int):
 						value = hex(value).rstrip('L').lstrip('0x')
 					print(key, '%10s'%('\t'), '------->', value, '\n')
 
 	else:
 		f.write('++++++++++++++++++++++++++++ Final Nodes ++++++++++++++++++++++++++++'+'\n')
-		for index, node in nodes.iteritems():
+		for index, node in nodes.items():
 		# for node in nodes:
-			for func, ctx in node.iteritems():
+			for func, ctx in node.items():
 				f.write('%s : %s \n'%(str(index), func)+'\n')
 				for (key, value) in ctx:
-					if isinstance(value, int) or isinstance(value, long):
+					if isinstance(value, int):
 						value = hex(value).rstrip('L').lstrip('0x')
 					f.write(key + '%10s'%('\t')+ ' -------> ' + value + '\n')
 
@@ -132,9 +132,9 @@ def print_nodes_list(nodes, f = False):
 		for node in nodes:
 		# for node in nodes:
 			print('\033[1m\n%s : %s  \033[0m'%(str(index), node['name']))
-			for key, value in node.iteritems():
+			for key, value in node.items():
 				if not key == 'name':
-					if isinstance(value, int) or isinstance(value, long):
+					if isinstance(value, int):
 						value = hex(value).rstrip('L').lstrip('0x')
 					print('%-15s -------> %s' %(key, value) )
 			index+=1		
@@ -144,15 +144,15 @@ def print_nodes_list(nodes, f = False):
 		for node in nodes:
 
 			f.write('%s : %s \n'%(str(index), node['name'])+'\n')
-			for key, value in node.iteritems():
+			for key, value in node.items():
 				if not key == 'name':
-					if isinstance(value, int) or isinstance(value, long):
+					if isinstance(value, int):
 						value = hex(value).rstrip('L').lstrip('0x')
 					f.write(key + '%10s'%('\t')+ ' -------> ' + value + '\n')	
 
 # Print if an instruction has not been implemented.
 def print_notimplemented():
-	for key, value in MyGlobals.notimplemented_ins.iteritems():
+	for key, value in MyGlobals.notimplemented_ins.items():
 		print(key + ' :: ' + str(value))			
 
 # Used for debugging purposes.
@@ -258,7 +258,7 @@ def getFuncHashes(sol_file, debug):
 	if debug: print(solc_out)
 
 
-	for (cname, bin_str) in re.findall(r"\n======= (.*?) =======\nBinary of the runtime part: \n(.*?)\n", solc_out[0]):
+	for (cname, bin_str) in re.findall(r"\n======= (.*?) =======\nBinary of the runtime part: \n(.*?)\n", solc_out[0].decode('utf-8')):
 		if len(bin_str)>max_size:
 			max_size = len(bin_str)
 			max_code = bin_str
@@ -269,7 +269,7 @@ def getFuncHashes(sol_file, debug):
 	try_no = 0
 	solc_p1 = safe_subprocess( solc_cmd1 , sol_file, 100, 1 )
 	solc_out1 = solc_p1.communicate()
-	solc_str = solc_out1[0].lstrip('\n').rstrip('\n')
+	solc_str = solc_out1[0].decode('utf-8').lstrip('\n').rstrip('\n')
 
 	if not solc_str=='':
 		pass
@@ -304,7 +304,7 @@ def get_func_hashes(binfile):
 
 	disasm = []
 
-	for key, value in complete_disasm.iteritems():
+	for key, value in complete_disasm.items():
 		disasm  = value[0]
 
 	funclist = []
@@ -324,7 +324,7 @@ def get_func_hashes(binfile):
 # returns True wohen a solution should be accepted. This function filters out the duplicate and unwanted solutions.
 def solution_filter(solution, function1, function2):
 	keys = []
-	for key, value in solution.iteritems():
+	for key, value in solution.items():
 		if 'inputlength' in key:
 			keys.append(key)
 		
@@ -337,7 +337,7 @@ def solution_filter(solution, function1, function2):
 			found = False
 			
 			for lists in MyGlobals.solution_dict[(function1, function2)]:
-				for key, value in lists.iteritems():
+				for key, value in lists.items():
 					if 'CALLER' in key:
 						if key in solution:
 							if solution[key] == value and value in MyGlobals.st['caller']: 

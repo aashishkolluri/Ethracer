@@ -69,7 +69,7 @@ def disasm(args, key):
 			cname = args.split('.bin')[0]+' bytecode'
 			fp = open(args, 'r')
 			bin_str=fp.read().replace('\n', '')
-			print bin_str
+			print (bin_str)
 		else:
 			cname = 'bytecode'
 			bin_str =  args[2:]
@@ -83,7 +83,7 @@ def disasm(args, key):
 
 		if int(key)==1:
 			prettyprint(listindex, disasm_out)
-			print '\n'
+			print ('\n')
 
 		complete_disasm[cname] = [disasm_out, listindex, dictindex]
 
@@ -94,9 +94,9 @@ def disasm(args, key):
 		solc_out = solc_p.communicate()
 
 		if solc_out[0]=='':
-			print "OOPS! problem with the sol code"
+			print ("OOPS! problem with the sol code")
 					
-		for (cname, bin_str) in re.findall(r"\n======= (.*?) =======\nBinary of the runtime part: \n(.*?)\n", solc_out[0]):
+		for (cname, bin_str) in re.findall(r"\n======= (.*?) =======\nBinary of the runtime part: \n(.*?)\n", solc_out[0].decode('utf-8')):
 			# print "Contract %s:" % cname, "\n"
 			# print bin_str
 			temp_list, listindex, dictindex   = convert(bin_str)
@@ -106,7 +106,7 @@ def disasm(args, key):
 
 			if int(key)==1:
 				prettyprint(listindex, disasm_out)
-				print '\n'
+				print ('\n')
 
 			complete_disasm[cname] = [disasm_out, listindex, dictindex]
 
@@ -128,13 +128,13 @@ def prettyprint(listindex, disasm_out):
 	i = 0
 	for item in disasm_out:
 		if item[1] == -1:
-			print i, hex(listindex[i]).split('x')[1], listindex[i], 'missing opcode'
+			print (i, hex(listindex[i]).split('x')[1], listindex[i], 'missing opcode')
 			
 		elif 'PUSH' in item[1]:
-			print i, hex(listindex[i]).split('x')[1], listindex[i], item[1],'    ', item[5]
+			print (i, hex(listindex[i]).split('x')[1], listindex[i], item[1],'    ', item[5])
 
 		else:
-			print i, hex(listindex[i]).split('x')[1], listindex[i], item[1]    
+			print (i, hex(listindex[i]).split('x')[1], listindex[i], item[1]    )
 		i+=1    
 
 def safe_subprocess(a1, a2, max_tries, wait_time):

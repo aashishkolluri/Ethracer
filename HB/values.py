@@ -1,4 +1,5 @@
-from web3 import Web3, KeepAliveRPCProvider, IPCProvider
+from web3 import Web3
+# , KeepAliveRPCProvider, IPCProvider
 import copy
 from z3 import *
 import datetime
@@ -21,15 +22,18 @@ def optimize_hb(hb_list):
 def get_storage_value( address, index, read_from_blockchain = False ):
 
 	if read_from_blockchain:
-		if MyGlobals.STORAGE_AT_BLOCK < 4350000:
-			web3 = Web3(KeepAliveRPCProvider(host='127.0.0.1', port='8666'))
-		else:
-			web3 = Web3(KeepAliveRPCProvider(host='127.0.0.1', port='8545'))
+		# if MyGlobals.STORAGE_AT_BLOCK < 4350000:
+			# web3 = Web3(KeepAliveRPCProvider(host='127.0.0.1', port='8666'))
+		web3 = Web3(Web3.HTTPProvider("http://127.0.0.1:8666"))
+		# else:
+		# 	# web3 = Web3(KeepAliveRPCProvider(host='127.0.0.1', port='8545'))
+		# 	web3 = Web3(Web3.HTTPProvider("http://127.0.0.1:8545"))
 
+		# print(Web3.toChecksumAddress(address), '\n')	
 		if MyGlobals.STORAGE_AT_BLOCK >= 0:
-			value = web3.eth.getStorageAt( address, index, MyGlobals.STORAGE_AT_BLOCK )
+			value = web3.eth.getStorageAt( Web3.toChecksumAddress(address), index, MyGlobals.STORAGE_AT_BLOCK )
 		else:
-			value = web3.eth.getStorageAt( address, index )
+			value = web3.eth.getStorageAt( Web3.toChecksumAddress(address), index )
 		return value
 	else:
 		return '0'.zfill(64)

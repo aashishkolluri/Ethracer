@@ -10,6 +10,7 @@ from check import *
 import op_parse
 import op_exec
 from op_exec import print_balance_difference, pad_address
+import codecs
 
 def preprocess(contract_address, trace_new, nodes):
 # Clear all parameters
@@ -22,7 +23,7 @@ def preprocess(contract_address, trace_new, nodes):
 def cart_input(inputstr):
 	input_dict = {}
 	length = len(inputstr)
-	no_inputs = (len(inputstr)-8)/64
+	no_inputs = (len(inputstr)-8)//64
 	mutable = [0 for i in range(0, no_inputs)]
 	mutable_positions = []
 	final_input_strings = []

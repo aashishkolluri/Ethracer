@@ -5,13 +5,13 @@ from parse_code import *
 import datetime
 import sys
 
-'''
-* This class filters out all the functions which do not change the state.
-* It also filters functions which do not have a read write conflict with any other 
-function for all shared global variables.
-'''
-class SearchEnhance:
 
+class SearchEnhance:
+	'''
+	* This class filters out all the functions which do not change the state.
+	* It also filters functions which do not have a read write conflict with any other 
+		function for all shared global variables.
+	'''
 	def cartesian(self, lists):
 		if lists == []: return [()]
 		return [x + (y,) for x in self.cartesian(lists[:-1]) for y in lists[-1]]
@@ -106,7 +106,7 @@ class SearchEnhance:
 				if each_pair[0] in MyGlobals.funcvardata and each_pair[1] in MyGlobals.funcvardata:
 
 					print(each_pair[0], each_pair[1], MyGlobals.funcvardata[each_pair[0]])	
-					for key, value in MyGlobals.funcvardata[each_pair[0]].iteritems():
+					for key, value in MyGlobals.funcvardata[each_pair[0]].items():
 
 						if key in MyGlobals.funcvardata[each_pair[1]]:
 							if 'W' in MyGlobals.funcvardata[each_pair[1]][key] or 'W' in MyGlobals.funcvardata[each_pair[0]][key]:

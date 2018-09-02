@@ -13,15 +13,16 @@ random.seed(datetime.datetime.now())
 import z3
 from z3 import *
 
-''' 
-* This class is responsible for generatig ad propogatig symbolic costraints.
-* Function run_one_check implemets the framework of finding weak and \
-  execute_one_block is resposible for executing each block of instructions 
-  and checking path feasiblity along the way.
-* It returns the solution of a weak HB relation if it exists.  
-'''
+
 class EVM(EVMCore):
-	
+	''' 
+	* This class is responsible for generating and propogating symbolic costraints.
+	* Function run_one_check implements the framework of finding weak HB and \
+	  execute_one_block is resposible for executing each block of instructions 
+	  and checking path feasiblity along the way.
+	* It returns the solution of a weak HB relation if it exists.  
+	'''
+
 	def __init__(self, max_call_depth, max_jump_depth, search_enhance, contract_address, function1, function2, noHB, debug, read_from_blockchain):
 		self.max_call_depth = max_call_depth
 		self.max_jump_depth = max_jump_depth
@@ -63,7 +64,7 @@ class EVM(EVMCore):
 		return True, True
 
 	def add_additional_conditions(self, solver, sha3_values):
-		for sym_var, concrete_val in sha3_values.iteritems():
+		for sym_var, concrete_val in sha3_values.items():
 
 			if len(concrete_val) == 1:
 				temp_conc =BitVecVal(int(concrete_val[0]), 256)
@@ -102,11 +103,11 @@ class EVM(EVMCore):
 		1 -----> function1 terminates.
 		2 -----> function2 terminates.
 		3 -----> function2 terminates or function2 throws.
-		4 -----> function1 terminates if function2 throws in stage 3.
+		4 -----> function1 throws if function2 terminates in stage 3.
 
 		This function takes the key as input which specifies the phase.
-	    Hence, the values of key could be 1, 2, 3, 4. 
-	    It calls into execute_one_block for symbolic analysis of each phase.
+		Hence, the values of key could be 1, 2, 3, 4. 
+		It calls into execute_one_block for symbolic analysis of each phase.
 	''' 		
 
 	def  run_one_check(self, ops, key, datastructures = {}):
@@ -390,7 +391,7 @@ class EVM(EVMCore):
 					datastructures = self.new_state(stack, storage, sha3_dict, sha3_values, mmemory, trace, data)
 					MyGlobals.s.push()
 					self.run_one_check(ops, key+1, datastructures)
-	 				MyGlobals.s.pop()
+					MyGlobals.s.pop()
 					return
 
 
@@ -598,7 +599,7 @@ class EVM(EVMCore):
 									MyGlobals.solver_configurations[temps] = satisfied
 
 							if satisfied:
-								if (MyGlobals.last_eq_func) == long(int(MyGlobals.functions[len(MyGlobals.functions)-1][1], 16)) and (MyGlobals.set_storage_symbolic) and function_hash in ['11111111', '22222222']:
+								if (MyGlobals.last_eq_func) == (int(MyGlobals.functions[len(MyGlobals.functions)-1][1], 16)) and (MyGlobals.set_storage_symbolic) and function_hash in ['11111111', '22222222']:
 									MyGlobals.jumpi_switch = True
 									MyGlobals.last_eq_func = -1
 									fallback_frame = True
@@ -726,7 +727,7 @@ class EVM(EVMCore):
 								if self.debug: print ('Now searching with jumpi check : Branch 2\n')
 
 								if (not function_hash == '11111111') and (not function_hash == '22222222'):
-									if (MyGlobals.last_eq_func) == long(int(function_hash, 16)) and (MyGlobals.set_storage_symbolic):
+									if (MyGlobals.last_eq_func) == (int(function_hash, 16)) and (MyGlobals.set_storage_symbolic):
 										MyGlobals.jumpi_switch = True
 
 								if self.debug:
@@ -917,7 +918,7 @@ class EVM(EVMCore):
 
 					exact_address = self.get_value(s1) if is_bv_value(s1['z3']) else -1
 					changed_offset = exact_address
-					if (addr - exact_address)/32 >= 2 : changed_offset = addr/2
+					if (addr - exact_address)//32 >= 2 : changed_offset = addr//2
 								
 					if self.search_enhance:
 						if not self.is_fixed( mmemory[changed_offset] ):
@@ -929,7 +930,7 @@ class EVM(EVMCore):
 						newpos = pos+1
 						continue
 					# If the memory location of sha3 is not already defined
-					if not mmemory[addr/2]['z3'].as_long() in sha3_dict:
+					if not mmemory[addr//2]['z3'].as_long() in sha3_dict:
 						text = str(mmemory[self.get_value(s1)]['z3'])
 
 						if 'CALLER' in str(mmemory[self.get_value(s1)]['z3']):
@@ -955,20 +956,20 @@ class EVM(EVMCore):
 								#find the keccak hash of the new concrete value
 								val = '' 
 								
-								for i in range(addr/32):
+								for i in range(addr//32):
 								
 									val += '%064x' % self.get_value(mmemory[self.get_value(s1) + i*32])
 
 								k = keccak_256()
-								k.update(val.decode('hex'))
+								k.update(codecs.decode(val, 'hex'))
 								digest = k.hexdigest()
 								res = {'type':'constant','step':ops[pos]['id'], 'z3':BitVecVal(int(digest,16), 256) }
 
 								# Copy all the contents of the previous sha3 dict and sha3_values
 								sha3_dict2 = copy.deepcopy(sha3_dict)
 								sha3_values2 = copy.deepcopy(sha3_values)
-								sha3_dict2[mmemory[addr/2]['z3'].as_long()] = []
-								sha3_dict2[mmemory[addr/2]['z3'].as_long()].append(const_addr)
+								sha3_dict2[mmemory[addr//2]['z3'].as_long()] = []
+								sha3_dict2[mmemory[addr//2]['z3'].as_long()].append(const_addr)
 								# Copy all the datastructures
 								storage2 = copy.deepcopy(storage)
 								stack2 = copy.deepcopy(stack)
@@ -994,26 +995,26 @@ class EVM(EVMCore):
 								if self.debug: print('In branch 2 \n')
 								shuffle(MyGlobals.st['caller'])
 								for each_value in MyGlobals.st['caller']:
-									const_addr = long(int(each_value, 16))
+									const_addr = (int(each_value, 16))
 									found = False
 									#replace the symbolic variable with a concrete variable
 									mmemory[self.get_value(s1)]['z3'] = BitVecVal(const_addr, 256)
 									#find the keccak hash of the new concrete value
 									val = '' 
 									
-									for i in range(addr/32):
+									for i in range(addr//32):
 									
 										val += '%064x' % self.get_value(mmemory[self.get_value(s1) + i*32])
 
 									k = keccak_256()
-									k.update(val.decode('hex'))
+									k.update(codecs.decode(val, 'hex'))
 									digest = k.hexdigest()
 									res = {'type':'constant','step':ops[pos]['id'], 'z3':BitVecVal(int(digest,16), 256) }	
 									# Copy all the contents of the previous sha3 dict and sha3_values
 									sha3_dict2 = copy.deepcopy(sha3_dict)
 									sha3_values2 = copy.deepcopy(sha3_values)
-									sha3_dict2[mmemory[addr/2]['z3'].as_long()] = []
-									sha3_dict2[mmemory[addr/2]['z3'].as_long()].append(const_addr)	
+									sha3_dict2[mmemory[addr//2]['z3'].as_long()] = []
+									sha3_dict2[mmemory[addr//2]['z3'].as_long()].append(const_addr)	
 									sha3_values2[sm] = []
 									sha3_values2[sm].append(const_addr)
 
@@ -1059,20 +1060,20 @@ class EVM(EVMCore):
 								#find the keccak hash of the new concrete value
 								val = '' 
 								
-								for i in range(addr/32):
+								for i in range(addr//32):
 								
 									val += '%064x' % self.get_value(mmemory[self.get_value(s1) + i*32])
 
 								k = keccak_256()
-								k.update(val.decode('hex'))
+								k.update(codecs.decode(val, 'hex'))
 								digest = k.hexdigest()
 								res = {'type':'constant','step':ops[pos]['id'], 'z3':BitVecVal(int(digest,16), 256) }
 
 								# Copy all the contents of the previous sha3 dict and sha3_values
 								sha3_dict2 = copy.deepcopy(sha3_dict)
 								sha3_values2 = copy.deepcopy(sha3_values)
-								sha3_dict2[mmemory[addr/2]['z3'].as_long()] = []
-								sha3_dict2[mmemory[addr/2]['z3'].as_long()].append(const_addr)
+								sha3_dict2[mmemory[addr//2]['z3'].as_long()] = []
+								sha3_dict2[mmemory[addr//2]['z3'].as_long()].append(const_addr)
 								# Copy all the datastructures
 								storage2 = copy.deepcopy(storage)
 								stack2 = copy.deepcopy(stack)
@@ -1101,8 +1102,8 @@ class EVM(EVMCore):
 								rand_input = 0
 
 								if key<=2:
-									# sha3_dict[mmemory[addr/2]['z3'].as_long()].append(long(int('%030x' % random.randrange(16**40), 16)))
-									rand_input = long(int('%030x' % random.randrange(16**40), 16))
+									# sha3_dict[mmemory[addr/2]['z3'].as_long()].append((int('%030x' % random.randrange(16**40), 16)))
+									rand_input = (int('%030x' % random.randrange(16**40), 16))
 
 								else:
 									print('\033[91m[-] Something wrong.... Asking symbolic variable for input in third call \033[0m', '\n')
@@ -1121,19 +1122,19 @@ class EVM(EVMCore):
 									#find the keccak hash of the new concrete value
 									val = '' 
 									
-									for i in range(addr/32):
+									for i in range(addr//32):
 									
 										val += '%064x' % self.get_value(mmemory[self.get_value(s1) + i*32])
 
 									k = keccak_256()
-									k.update(val.decode('hex'))
+									k.update(codecs.decode(val, 'hex'))
 									digest = k.hexdigest()
 									res = {'type':'constant','step':ops[pos]['id'], 'z3':BitVecVal(int(digest,16), 256) }	
 									# Copy all the contents of the previous sha3 dict and sha3_values
 									sha3_dict2 = copy.deepcopy(sha3_dict)
 									sha3_values2 = copy.deepcopy(sha3_values)
-									sha3_dict2[mmemory[addr/2]['z3'].as_long()] = []
-									sha3_dict2[mmemory[addr/2]['z3'].as_long()].append(const_addr)	
+									sha3_dict2[mmemory[addr//2]['z3'].as_long()] = []
+									sha3_dict2[mmemory[addr//2]['z3'].as_long()].append(const_addr)	
 									sha3_values2[sm] = []
 									sha3_values2[sm].append(const_addr)
 
@@ -1182,12 +1183,12 @@ class EVM(EVMCore):
 								mmemory[self.get_value(s1)]['z3'] = BitVecVal(const_addr, 256)
 								val = '' 
 								
-								for i in range(addr/32):
+								for i in range(addr//32):
 								
 									val += '%064x' % self.get_value(mmemory[self.get_value(s1) + i*32])
 
 								k = keccak_256()
-								k.update(val.decode('hex'))
+								k.update(codecs.decode(val, 'hex'))
 								digest = k.hexdigest()
 								res = {'type':'constant','step':ops[pos]['id'], 'z3':BitVecVal(int(digest,16), 256) }
 
@@ -1217,7 +1218,7 @@ class EVM(EVMCore):
 							# If values of the symbolic variable have not been defined	
 							else:
 								if self.debug: print('In branch 6 \n')
-								const_addr = sha3_dict[mmemory[addr/2]['z3'].as_long()][0]
+								const_addr = sha3_dict[mmemory[addr//2]['z3'].as_long()][0]
 								const_addr = convert_int_to_hexStr(const_addr)
 
 								if const_addr in MyGlobals.st['caller']:
@@ -1227,19 +1228,19 @@ class EVM(EVMCore):
 									#find the keccak hash of the new concrete value
 									val = '' 
 									
-									for i in range(addr/32):
+									for i in range(addr//32):
 									
 										val += '%064x' % self.get_value(mmemory[self.get_value(s1) + i*32])
 
 									k = keccak_256()
-									k.update(val.decode('hex'))
+									k.update(codecs.decode(val, 'hex'))
 									digest = k.hexdigest()
 									res = {'type':'constant','step':ops[pos]['id'], 'z3':BitVecVal(int(digest,16), 256) }	
 									# Copy all the contents of the previous sha3 dict and sha3_values
 									sha3_dict2 = copy.deepcopy(sha3_dict)
 									sha3_values2 = copy.deepcopy(sha3_values)
-									sha3_dict2[mmemory[addr/2]['z3'].as_long()] = []
-									sha3_dict2[mmemory[addr/2]['z3'].as_long()].append(const_addr)	
+									sha3_dict2[mmemory[addr//2]['z3'].as_long()] = []
+									sha3_dict2[mmemory[addr//2]['z3'].as_long()].append(const_addr)	
 									sha3_values2[sm] = []
 									sha3_values2[sm].append(const_addr)
 
@@ -1288,12 +1289,12 @@ class EVM(EVMCore):
 								#find the keccak hash of the new concrete value
 								val = '' 
 								
-								for i in range(addr/32):
+								for i in range(addr//32):
 								
 									val += '%064x' % self.get_value(mmemory[self.get_value(s1) + i*32])
 
 								k = keccak_256()
-								k.update(val.decode('hex'))
+								k.update(codecs.decode(val, 'hex'))
 								digest = k.hexdigest()
 								res = {'type':'constant','step':ops[pos]['id'], 'z3':BitVecVal(int(digest,16), 256) }
 
@@ -1328,7 +1329,7 @@ class EVM(EVMCore):
 								rand_input = 0
 
 								if key<=2:
-									rand_input = long(int('%030x' % random.randrange(16**40), 16))
+									rand_input = (int('%030x' % random.randrange(16**40), 16))
 
 								else:
 									print('\033[91m[-] Something wrong.... Asking symbolic variable for input in third call \033[0m', '\n')
@@ -1336,7 +1337,7 @@ class EVM(EVMCore):
 								
 								lists = []
 								lists.append(rand_input)
-								lists.append(sha3_dict[mmemory[addr/2]['z3'].as_long()][0])
+								lists.append(sha3_dict[mmemory[addr//2]['z3'].as_long()][0])
 								
 
 								for each_value in lists:
@@ -1346,12 +1347,12 @@ class EVM(EVMCore):
 									#find the keccak hash of the new concrete value
 									val = '' 
 									
-									for i in range(addr/32):
+									for i in range(addr//32):
 									
 										val += '%064x' % self.get_value(mmemory[self.get_value(s1) + i*32])
 
 									k = keccak_256()
-									k.update(val.decode('hex'))
+									k.update(codecs.decode(val, 'hex'))
 									digest = k.hexdigest()
 									res = {'type':'constant','step':ops[pos]['id'], 'z3':BitVecVal(int(digest,16), 256) }	
 									# Copy all the contents of the previous sha3 dict and sha3_values
