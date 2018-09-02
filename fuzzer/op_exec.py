@@ -7,8 +7,6 @@ from hashlib import *
 from sha3 import *
 from web3 import Web3
 import codecs
-# , KeepAliveRPCProvider, IPCProvider
-
 
 global st
 st = {}
@@ -158,13 +156,7 @@ def send_ether(addr_from, addr_to, amount):
 def get_storage_value( address, index, st_blocknumber, read_from_blockchain = False ):
 
 	if read_from_blockchain:
-		# if st_blocknumber < 4350000:
-			# web3 = Web3(KeepAliveRPCProvider(host='127.0.0.1', port='8666'))
 		web3 = Web3(Web3.HTTPProvider("http://127.0.0.1:8666"))
-		# else:
-		# 	# web3 = Web3(KeepAliveRPCProvider(host='127.0.0.1', port='8545'))
-		# 	web3 = Web3(Web3.HTTPProvider("http://127.0.0.1:8545"))
-
 		value = web3.eth.getStorageAt( address, index )
 		return value
 	else:
@@ -215,8 +207,6 @@ def binary( o1, o2 , step, op='NONE'):
 		if op in ['XOR','ADD'] and 0 == o2: return o1
 
 	if o1 == undefined or o2 == undefined: return undefined 
-
-#    print('%s : %x %x' % (op, o1, o2) )
 
 	if   op =='AND' : return o1 & o2
 	elif op =='OR'  : return o1 | o2
@@ -284,8 +274,6 @@ def execute( code, stack, pos, storage, temp_storage, mmemory, data, st_blocknum
 
 	if op in ['ADD','MUL','SUB','DIV','SDIV','MOD','SMOD','EXP','SIGNEXTEND','AND','OR','XOR', 'LT','GT','SLT','SGT','EQ']:
 		stack.append( binary (  stack.pop() , stack.pop() , step , op ) )
-
-#		print('%x' % stack[-1])
 
 
 	if op in ['ADDMOD','MULMOD']: 
@@ -523,32 +511,21 @@ def execute( code, stack, pos, storage, temp_storage, mmemory, data, st_blocknum
 		else:
 			
 			if read_from_blockchain:
-				# if st_blocknumber < 4350000:
-					# web3 = Web3(KeepAliveRPCProvider(host='127.0.0.1', port='8666'))
 				web3 = Web3(Web3.HTTPProvider("http://127.0.0.1:8666"))
-
-				# if st_blocknumber >= 4350000:
-					# web3 = Web3(KeepAliveRPCProvider(host='127.0.0.1', port='8545'))
-					# web3 = Web3(Web3.HTTPProvider("http://127.0.0.1:8545"))
-
 				contract_address = get_params('contract_address','')
 				contract_address_new = contract_address
 				if not isinstance(contract_address_new, str):
 					contract_address_new = str(contract_address_new).rstrip('L')
 
 				if contract_address_new[-1]=='L': contract_address_new = contract_address_new.rstrip('L')
-				# print(contract_address_new)	
 				contract_address_new = pad_address(contract_address_new)
 				value = web3.eth.getStorageAt( contract_address_new , addr , st_blocknumber)
 				if value[0:2] == '0x': value = value[2:]
-				# value = int(value,16)
 				value = int.from_bytes(value, byteorder='big')
 			else:
 				value = 0
 
 			temp_storage[addr] = value	
-			# storage[addr] = value
-			# print(temp_storage)
 			res = copy.deepcopy(value)
 
 
@@ -565,11 +542,9 @@ def execute( code, stack, pos, storage, temp_storage, mmemory, data, st_blocknum
 	        return stack, pos, True, mmemory
 
 	    storage[addr] = stack.pop();
-	    # temp_storage[addr] = copy.deepcopy(storage[addr])
 
 			
 	if op == 'JUMP':
-
 
 		if len(stack) < 1:
 			if debug: print('\033[95m[-] In JUMP the |stack|=%2d is too small to execute JUMP\033[0m' % len(stack) )
