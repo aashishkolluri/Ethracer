@@ -393,7 +393,6 @@ class EVMCore(EVMCoreHelper):
 		elif op == 'GAS':           stack.append( {'type':'constant','step':step, 'z3': BitVecVal(int(get_params('gas',''),16), 256) } )
 		elif op == 'MSIZE':         stack.append( {'type':'constant','step':step, 'z3': BitVecVal(len(mmemory), 256) } )
 		elif op == 'BLOCKHASH':     stack.append( {'type':'constant','step':step, 'z3': BitVecVal(0x123,256)} ) # does not use the argument which specifies the blocknumber
-		# elif op == 'BALANCE':       stack.append( {'type':'constant','step':step, 'z3': BitVecVal(int(get_params('contract_balance',''), 10), 256)} )        # always assume that it is the balance of the current contract
 		elif op == 'BALANCE':       stack.append( {'type':'constant','step':step, 'z3': BitVecVal(10**25, 256)} )        # always assume that it is the balance of the current contract
 		elif op == 'POP':           pass
 		elif op.find('LOG') >= 0:   pass
@@ -466,14 +465,8 @@ class EVMCore(EVMCoreHelper):
 
 				return pos, False
 
-
-
-
 		elif op in ['CALLDATASIZE']:
-
 			return pos, False
-
-
 
 		elif op == 'CALL':
 
