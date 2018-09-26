@@ -50,6 +50,8 @@ The list of dependencies is as follows:
 4. Z3 Theorem prover, check https://github.com/Z3Prover/z3
 5. web3, try `python3.6 -m pip install web3` or `pip3 install web3`
 6. PyQt5 (only for GUI Maian), check  https://gist.github.com/ujjwal96/1dcd57542bdaf3c9d1b0dd526ccd44ff
+7. rlp version 0.6.0, try `python3.6 -m pip install rlp==0.6.0`
+8. pysha3, try `python3.6 -m pip install pysha3`
 
 **All these dependencies must be installed for python3.6**
 
