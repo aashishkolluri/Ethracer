@@ -3,9 +3,9 @@
 The repository contains Python implementation of Maian -- a tool for automatic detection of buggy Ethereum smart contracts of three different types: prodigal, suicidal and greedy. Maian processes contract's bytecode and tries to build a trace of transactions to find and confirm bugs. The technical aspects of the approach are described in [our paper](https://arxiv.org/abs/1802.06038). 
 
 ## Update
-Maian source code is being ported to python3(>=3.6). Find the new manual to install and run Maian below.
-For Linux based distributions with python3.5 as default python version, note that your pip3 might point to python3.5 instead of 3.6
-Currently, the GUI-based Maian is still in development.
+* Maian source code is being ported to python3(>=3.6). Find the new manual to install and run Maian below.
+* For Linux based distributions with python3.5 as default python version, note that your pip3 might point to python3.5 instead of 3.6
+* Currently, the GUI-based Maian is still in development.
 
 ## Evaluating Contracts
 Maian analyzes smart contracts defined in a file `<contract file>` with:  
@@ -44,13 +44,14 @@ A snapshot of one run is given below
 Maian should run smoothly on Linux (we've checked on Ubuntu/Mint) and MacOS. Our attempts to run it on Windows have failed. 
 The list of dependencies is as follows:
 
-1. Go Ethereum, check https://ethereum.github.io/go-ethereum/install/
-2. Solidity compiler, check http://solidity.readthedocs.io/en/develop/installing-solidity.html
-3. Z3 Theorem prover, check https://github.com/Z3Prover/z3
-4. web3, try `python3.6 -m pip install web3` or `pip3 install web3`
-5. PyQt5 (only for GUI Maian), check  https://gist.github.com/ujjwal96/1dcd57542bdaf3c9d1b0dd526ccd44ff
+1. Python3.6 and pip3
+2. Go Ethereum, check https://ethereum.github.io/go-ethereum/install/
+3. Solidity compiler, check http://solidity.readthedocs.io/en/develop/installing-solidity.html
+4. Z3 Theorem prover, check https://github.com/Z3Prover/z3
+5. web3, try `python3.6 -m pip install web3` or `pip3 install web3`
+6. PyQt5 (only for GUI Maian), check  https://gist.github.com/ujjwal96/1dcd57542bdaf3c9d1b0dd526ccd44ff
 
-"All these dependencies must be installed for python3.6"
+**All these dependencies must be installed for python3.6**
 
 ## Important
 
