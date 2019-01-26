@@ -5,7 +5,7 @@ This repository contains official Python3 implementation of smart contract analy
 
 ## Dependencies:
 	* Docker.
-	* A geth rpc interface over a fully synced Ethereum blockchain
+	* A fully synced Ethereum blockchain runnning over localhost and port 8666.
 	* A working network connection between docker and Ethereum blockchain server.
 
 
