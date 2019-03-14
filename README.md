@@ -1,6 +1,6 @@
 # Ethracer
 
-This repository contains official Python3 implementation of smart contract analysis tool Ethracer. It can be used to find EO vulnerabilities in smart contracts. For more information about the bugs and the tool, you can read our technical paper *Exploiting the laws of order in smart contracts*.
+This repository contains official Python3 implementation of smart contract analysis tool Ethracer. It can be used to find EO vulnerabilities in smart contracts. For more information about the bugs and the tool, you can read our technical paper [Exploiting the laws of order in smart contracts](https://arxiv.org/abs/1810.11605)
 
 
 ## Dependencies:
