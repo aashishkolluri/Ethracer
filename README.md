@@ -9,7 +9,8 @@ This repository contains official Python3 implementation of smart contract analy
 Install docker from [here](https://runnable.com/docker/install-docker-on-linux)
 
 ### Ethereum blockchain
-Ethracer requires a fully synced blockchain for maximum performance. Sync the blockchain over port 8666, more on this [here](https://github.com/ethereum/go-ethereum). If you have a fully synced blockchain already then, 
+Ethracer requires a fully synced blockchain for maximum performance. Sync the blockchain over port 8666, more on this [here](https://github.com/ethereum/go-ethereum). If you have a fully synced blockchain already then,
+
 	 geth --datadir [chaindirectory] --rpc --maxpeers 0 --rpcport 8666 &
 
 **Important:** There should be a working network connection between docker and Ethereum blockchain server. 
@@ -28,4 +29,5 @@ Ethracer requires a fully synced blockchain for maximum performance. Sync the bl
 
 ### Run Tests
 Run the command below and check the reports directory. You can find the minimal traces and all the traces with EO bugs for two contracts given in tests folder.
+
     make tests
