@@ -122,7 +122,7 @@ class SearchEnhance:
 			if not each_pair[0]==each_pair[1]:
 				if each_pair[0] in MyGlobals.funcvardata and each_pair[1] in MyGlobals.funcvardata:
 
-					print(each_pair[0], each_pair[1], MyGlobals.funcvardata[each_pair[0]])	
+					#print(each_pair[0], each_pair[1], MyGlobals.funcvardata[each_pair[0]])	
 					for key, value in MyGlobals.funcvardata[each_pair[0]].items():
 
 						if key in MyGlobals.funcvardata[each_pair[1]]:

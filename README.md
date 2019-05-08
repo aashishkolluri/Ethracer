@@ -24,4 +24,8 @@ Ethracer requires a fully synced blockchain for maximum performance. Sync the bl
 
 ### Fire Ethracer!
 	cd /ethracer/HB && python3.6 main.py --checkone /tests/contracts_solidity/0x325476448021c96c4bf54af304ed502bb7ad0675.sol 0x325476448021c96c4bf54af304ed502bb7ad0675 --blockchain --owner 0x056682f1cf0dc48266c1e47057297a64b58bb6fa
-      
+
+### Run Tests
+Run the command below and check the reports directory. You can find the minimal traces and all the traces with EO bugs for two contracts given in tests folder.
+
+    	make tests
