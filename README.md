@@ -11,7 +11,7 @@ Install docker from [here](https://runnable.com/docker/install-docker-on-linux)
 ### Ethereum blockchain
 Ethracer requires a fully synced blockchain for maximum performance. Sync the blockchain over port 8666, more on this [here](https://github.com/ethereum/go-ethereum). If you have a fully synced blockchain already then,
 
-	 geth --datadir [chaindirectory] --rpc --maxpeers 0 --rpcport 8666 &
+	 geth --datadir [chainDirectory] --rpc --maxpeers 0 --rpcport 8666
 
 **Important:** There should be a working network connection between docker and Ethereum blockchain server. 
 
