@@ -354,7 +354,7 @@ def check_one_depth_all_traces( depth, nodes, hb, storage_predefined, balances, 
 			for j in all_storages:
 
 				# Do not consider traces with permutations of the same function
-				if False:#True:
+				if True:#False:
 					diff_func = {}
 					for z in i:
 						diff_func[nodes[z]['name']] = True
