@@ -30,4 +30,4 @@ Ethracer requires a fully synced blockchain for maximum performance. Sync the bl
 ### Run Tests
 Run the command below and check the reports directory. You can find the minimal traces and all the traces with EO bugs for two contracts given in tests folder.
 
-    cd /ethracer && make tests
+    cd /ethracer && make runTests

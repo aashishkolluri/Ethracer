@@ -33,7 +33,7 @@ cd build &&  make &&  make install
 
 ENV PYTHONPATH "${PYTONPATH}:/dependencies"
 
-RUN apt-get install -y python-pip python3-pip musl-dev pandoc && pip3 install --upgrade setuptools
+RUN apt-get update && apt-get install -y python-pip python3-pip musl-dev pandoc && pip3 install --upgrade setuptools
 RUN python3.6 -m pip install requests web3 pysha3
 EXPOSE 80
 
