@@ -28,6 +28,6 @@ Ethracer requires a fully synced blockchain for maximum performance. Sync the bl
 	cd /ethracer/HB && python3.6 main.py --checkone [Contract source code] [Contract address] --blockchain --owner [Owner address]
 
 ### Run Tests
-Run the command below and check the reports directory. You can find the minimal traces and all the traces with EO bugs for two contracts given in tests folder.
+Make sure that you have a **Fully synnced blockchain** (atleast uptil 5400000 block number) and that it is running on port 8666. Run the command below and check the reports directory. You can find all the traces including the minimal ones with EO bugs, for two contracts given in tests folder.
 
     cd /ethracer && make runTests
