@@ -31,3 +31,6 @@ Ethracer requires a fully synced blockchain for maximum performance. Sync the bl
 Make sure that you have a **Fully synced blockchain** (atleast uptil 5400000 block number) and that it is running on port 8666. Run the command below and check the /ethracer/HB/reports directory. You can find all the traces including the minimal ones with EO bugs, for two contracts given in tests folder.
 
     cd /ethracer && make runTests
+
+### Evaluation Datasets
+Our evaluation datasets are available at https://drive.google.com/file/d/1190VXwu502M-vgT8yyuFp0lFUVlxnMhO/view?usp=sharing
